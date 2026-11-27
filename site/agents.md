@@ -70,6 +70,7 @@ Under https://designwithcolorcubes.org/downloads/:
 |---|---|
 | `color-cubes-7x7-set.zip` | All of the 7×7 set's files in one zip, for people who want that |
 | `patterns/pattern-sheet-01.svg` to `patterns/pattern-sheet-72.svg`, `patterns/worksheet-7x7.svg` | Printable pattern sheets and a blank 7×7 worksheet |
+| `lid/original-lid.svg` | The original 1930s lid, redrawn as an SVG (200 × 200 mm) |
 | `patterns/designs/{id}.svg` | Every design on its own (ids as in patterns.json) |
 | `printed-kit/`, `printed-scenes/`, `renders/`, `image-kit/`, `scanned-scenes/`, `scans/` | The pictures, one file each; take the paths from downloads.json |
 

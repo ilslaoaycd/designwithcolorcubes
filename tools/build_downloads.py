@@ -9,6 +9,7 @@ Sources, all under site/:
   downloads/{kit}/               the picture kits, one folder each (tools/build_assets.py on Isaac's
                                  machine; --unpack made them from the zips once)
   downloads/scans/               scans of the original set (tools/build_scans.py)
+  downloads/lid/                 the original 1930s lid redrawn as SVG (added by hand)
 
 Writes site/downloads/thumbs/*.webp (metadata stripped), site/data/downloads.json, and the lists
 between the "files" markers in site/downloads/index.html. Open groups are plain HTML; folded
@@ -162,7 +163,8 @@ def patterns_section():
         size = f"{d['w']} × {d['h']}" if d else "Other"
         e = entry(p, name=(d["name"] if d else p.stem) + ".svg")
         by_size.setdefault((d["w"] * 100 + d["h"]) if d else 9999, (size, []))[1].append(e)
-    groups = [{"title": "Pattern sheets to print (A4 or US Letter)", "files": folder("patterns", pattern="*.svg")}]
+    groups = [{"title": "The original lid, redrawn (SVG)", "files": folder("lid", pattern="*.svg")},
+              {"title": "Pattern sheets to print (A4 or US Letter)", "files": folder("patterns", pattern="*.svg")}]
     for _, (size, files) in sorted(by_size.items()):
         groups.append({"title": f"Every {size} design", "files": files, "fold": True})
     return {"id": "patterns", "title": "Patterns", "groups": groups,
