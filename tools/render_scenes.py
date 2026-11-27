@@ -35,6 +35,8 @@ SCENES = {
     "blocks-original": [1400, 760],
     "spill-round": [2400, 1300],
     "then-and-now": [2000, 1100],
+    # link previews, laid on the paper by tools/build_og_photos.py
+    "og-patterns": [1200], "og-print": [1200],
     # stand-ins on the Files page (tools/build_downloads.py)
     "thumb-cube": [240], "thumb-cube-original": [240], "thumb-plate": [240], "thumb-tray": [240],
 }

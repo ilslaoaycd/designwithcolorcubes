@@ -78,10 +78,11 @@ python tools/build_lid_data.py [cover.svg] # site/data/lid-type.json: Rubik outl
 python tools/build_artwork.py              # lid artwork and the 12 lid designs
 node tools/build_patterns.mjs              # presets, pattern sheets and their zip
 python tools/build_scans.py <scans folder> # scans, cube cutouts and the scans zip
-python tools/build_assets.py <main pack> --printed <printed pack>  # page pictures, faces and atlases, 3D cubes, link preview and the picture zips (add --web to skip the zips)
-python tools/render_scenes.py [scene ...]        # the realistic renders (hero, trays, spill), from the 3D cubes in a browser (--paper for the paper grain)
+python tools/build_assets.py <main pack> --printed <printed pack>  # page pictures, faces and atlases, 3D cubes and the picture zips (add --web to skip the zips)
+python tools/render_scenes.py [scene ...]        # the realistic renders (hero, trays, spill, link previews), from the 3D cubes in a browser (--paper for the paper grain)
 node tools/build_logo.mjs [--png]                # the mark, favicon and page-header mark (--png: favicon.ico, touch and app icons)
-node tools/build_og.mjs                          # link-preview pictures for the designer and patterns pages
+node tools/build_og.mjs                          # link-preview pictures for the designer and box designer pages
+python tools/build_og_previews.py                # the other link previews: the home photo, and the patterns and print renders on paper
 python tools/build_downloads.py                  # the Files page: thumbnails, data/downloads.json and its lists (after any tool that changes the downloads)
 python tools/build_photo_sizes.py                # WebP sizes of the home page's photos for its srcsets (after changing one)
 node tools/build_seo.mjs                         # design counts and the opening list on the patterns page, sitemap.xml; checks every JSON-LD block (after changing pages or patterns.json)

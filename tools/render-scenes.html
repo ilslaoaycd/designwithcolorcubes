@@ -414,6 +414,37 @@ function thenAndNowScene() {
   return { w: 2000, h: 1025, seed: 311, ...m, view: { pitch: 50, azimuth: 0, fov: 13, margin: 0.03 }, fade: { soft: true } };
 }
 
+// Link previews (1200 × 630, laid on the paper by tools/build_og_photos.py).
+// The patterns page: printed trays of five sizes and designs, in a loose cluster on the table.
+function ogPatternsScene() {
+  const rng = mulberry32(512);
+  const t = (code, x, z, yaw) => laid(code, { x, z, yaw, tray: true, rng, trayColor: 0xf3f1ea, wobble: 1.5 });
+  const m = merge([
+    t("ww7rrr8ww-w7rbbbr8w-7rbyyybr8-rbyybyybr-rbybbbybr-rbyybyybr-6rbyyybr5-w6rbbbr5w-ww6rrr5ww", 0, 0, -0.03),
+    t("7rrrrr8-r31313r-r15551r-r35553r-r15551r-r31313r-6rrrrr5", -0.26, -0.055, 0.06),
+    t("b87r87b-6b1y2b5-713b428-rybbbyr-642b135-7b4y3b8-b56r56b", 0.26, 0.045, -0.07),
+    t("b3y4b-3yry4-yrrry-2yry1-b2y1b", -0.235, 0.165, -0.08),
+    t("b12b-1yy2-4yy3-b43b", 0.235, -0.155, 0.09)
+  ]);
+  return { w: 1200, h: 630, seed: 512, ...m, view: { pitch: 55, azimuth: 0, fov: 14, margin: 0.04 }, fade: { soft: true } };
+}
+
+// The print page: a printed tray being filled, its last rows still empty, loose cubes round it.
+function ogPrintScene() {
+  const rng = mulberry32(630);
+  const g = laid("686w313-868w131-686w313-wwwwwww-313w686-131w868-313w686", { x: -0.05, z: 0, yaw: -0.05, tray: true, rng, trayColor: 0xf3f1ea, wobble: 1.5 });
+  // Rows run back to front: keep four rows and the start of the fifth.
+  g.cubes = g.cubes.filter((_, i) => i < 7 * 4 + 3);
+  const m = merge([g]);
+  const trayBox = [{ x0: -0.15, x1: 0.05, z0: -0.1, z1: 0.1 }];
+  const loose = scatter(rng, 13, { x0: -0.3, x1: 0.3, z0: -0.13, z1: 0.13 }, "printed", trayBox);
+  // One cube resting on another.
+  const base = loose[loose.length - 1];
+  loose.push({ x: base.x + 0.003, z: base.z - 0.002, y: S * 1.5 + 0.0002, yaw: base.yaw + 0.45, q: SPLIT[1], finish: "printed" });
+  m.cubes.push(...loose);
+  return { w: 1200, h: 630, seed: 630, ...m, view: { pitch: 52, azimuth: -8, fov: 14, margin: 0.05 }, fade: { soft: true } };
+}
+
 // Small stand-ins on the Files page for files that aren't pictures: one cube of each finish, a
 // plate of cubes and an empty tray.
 function thumbCubeScene(finish, seed) {
@@ -526,6 +557,8 @@ const SCENES = {
   "blocks-original": blocksOriginalScene,
   "spill-round": spillScene,
   "then-and-now": thenAndNowScene,
+  "og-patterns": ogPatternsScene,
+  "og-print": ogPrintScene,
   "thumb-cube": () => thumbCubeScene("printed", 403),
   "thumb-cube-original": () => thumbCubeScene("original", 404),
   "thumb-plate": thumbPlateScene,

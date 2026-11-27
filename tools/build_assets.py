@@ -169,26 +169,6 @@ def slim_glb(src, dst, max_width=1536):
     print("%s %d KB (from %d KB)" % (dst.relative_to(ROOT).as_posix(), dst.stat().st_size // 1024, len(data) // 1024))
 
 
-def make_og():
-    """The link preview: the heap of printed cubes beside the name, on navy."""
-    from PIL import ImageDraw, ImageFont
-    W, H = 1200, 630
-    og = Image.new("RGBA", (W, H), "#1E2A5A")
-    art = Image.open(ART / "dump-printed.webp").convert("RGBA")
-    art = art.resize((700, round(art.height * 700 / art.width)), Image.LANCZOS)
-    og.alpha_composite(art, (630, (H - art.height) // 2))
-    draw = ImageDraw.Draw(og)
-    font = ImageFont.truetype(str(ROOT / "site" / "fonts" / "rubik-latin.woff2"), 92)
-    font.set_variation_by_axes([800])
-    small = ImageFont.truetype(str(ROOT / "site" / "fonts" / "rubik-latin.woff2"), 34)
-    small.set_variation_by_axes([400])
-    for i, (text, color) in enumerate([("Design with", "#F4ECD8"), ("Color", "#E3B23C"), ("Cubes", "#E3B23C")]):
-        draw.text((60, 110 + i * 94), text, font=font, fill=color)
-    draw.text((62, 432), "The 1930s pattern toy,", font=small, fill="#F4ECD8")
-    draw.text((62, 474), "remade for 3D printers", font=small, fill="#F4ECD8")
-    og.convert("RGB").save(ROOT / "site" / "img" / "og.png", optimize=True)
-    print("site/img/og.png")
-
 
 def scenes_zip(zpath, src, folders):
     """2D scenes: the on-black JPEGs as they are, the transparent PNGs as WebP to fit the size limit."""
@@ -244,7 +224,6 @@ def main(src, printed, web_only=False):
     slim_glb(printed / "model" / "color-cube-printed.glb", MODELS / "color-cube-printed.glb")
     print("site/models: 3 models")
 
-    make_og()
     if web_only:
         return
 

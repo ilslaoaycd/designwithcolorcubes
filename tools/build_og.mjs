@@ -1,10 +1,10 @@
-// build_og.mjs — link-preview pictures (1200×630) for the designer and patterns pages, in the
-// style of the home page's og.png: navy ground, Rubik, cream and yellow title, cubes on the right.
+// build_og.mjs — link-preview pictures (1200×630) for the designer and box designer pages: navy
+// ground, Rubik, cream and yellow title, cubes on the right. (The other pages use photographs,
+// from tools/build_og_previews.py.)
 // The trays are drawn by cubeface.js in the printed set's colors (PRINTED_FLAT), like the mark
 // and the per-tray previews the site Worker draws (workers/site/src/og.js).
 //
 //   site/img/og-designer.png
-//   site/img/og-patterns.png
 //   site/img/og-box.png         (the 1930s lid, drawn by lidart.js like the box designer)
 //
 // Needs Playwright with Chromium (the same as tools/render_scenes.py).
@@ -58,12 +58,7 @@ const PAGES = {
   "og-box.png": page("Box", "designer", "Your own designs and words on the lid, for a set of any size. Download it ready to print.",
     `<div style="left:40px;top:56px;width:470px;height:470px;padding:0;background:none;transform:rotate(-3deg)">${lid}</div>`),
   "og-designer.png": page("Color Cubes", "Designer", "Lay out a tray, see it in 3D, print it and share it with a short link.",
-    at(70, 95, 430, -4, byId["lid-01"].code)),
-  "og-patterns.png": page(`${patterns.lid.length + patterns.presets.length} Color Cubes`, "patterns", "The twelve from the 1930s lid and more for every tray from 2 × 2 to 10 × 10.",
-    at(30, 50, 230, -6, byId["quadrants-7x7"].code) +
-    at(290, 72, 210, 5, byId["lid-04"].code) +
-    at(50, 335, 215, 4, byId["candy-stripes-7x7"].code) +
-    at(292, 330, 225, -3, byId["lid-02"].code))
+    at(70, 95, 430, -4, byId["lid-01"].code))
 };
 
 const { chromium } = createRequire(import.meta.url)("playwright");
