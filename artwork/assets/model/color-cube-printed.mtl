@@ -1,0 +1,8 @@
+newmtl PrintedPLA
+Ka 1 1 1
+Kd 1 1 1
+Ks 0.05 0.05 0.05
+Ns 10
+map_Kd textures-printed/atlas.png
+norm textures-printed/atlas-normal.png
+map_Bump textures-printed/atlas-normal.png

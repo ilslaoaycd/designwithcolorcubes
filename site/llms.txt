@@ -1,0 +1,22 @@
+# Design with Color Cubes
+
+> Free files to 3D print Color Cubes, the 1930s pattern toy, for sets of 16 to 100 cubes, a box designer for the lid and tray, and an online designer for laying out and sharing patterns. A free project by Isaac Lloyd; nothing is for sale.
+
+Full notes for AI agents, including how to write a tray code and link to a design: https://designwithcolorcubes.org/agents.md
+
+## Pages
+
+- [Home](https://designwithcolorcubes.org/): Color Cubes, the Pattern Toy: print a set and the toy's history
+- [Print a set](https://designwithcolorcubes.org/#print): the exact files for your set size and print bed
+- [Box designer](https://designwithcolorcubes.org/box/): a lid and tray for any size, with your own designs and words
+- [Designer](https://designwithcolorcubes.org/designer/): lay out a tray, see it in 3D, print it, share it
+- [Patterns](https://designwithcolorcubes.org/patterns/): 841 ready-made designs
+- [History](https://designwithcolorcubes.org/history/): where the toy came from and the Kohs Block Design Test, with sources ([as Markdown](https://designwithcolorcubes.org/history/color-cubes-history.md))
+- [Files](https://designwithcolorcubes.org/downloads/): every download on its own, with Download all per section
+- [Pattern data](https://designwithcolorcubes.org/data/patterns.json): every design as a tray code
+- [Print file list](https://designwithcolorcubes.org/data/files.json): every print file with its size
+- [Download list](https://designwithcolorcubes.org/data/downloads.json): every file on the Files page
+
+## Optional
+
+- [Source on GitHub](https://github.com/ilslaoaycd/designwithcolorcubes)

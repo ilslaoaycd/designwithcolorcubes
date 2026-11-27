@@ -1,0 +1,50 @@
+{
+ "quadrants-7x7": {
+  "code": "686w313-868w131-686w313-wwwwww6-313w686-131w868-313w686",
+  "size": "7x7"
+ },
+ "checkerboard-7x7": {
+  "code": "brbrbrb-rbrbrbr-brbrbrb-rbrbrbr-brbrbrb-rbrbrbr-brbrbrb",
+  "size": "7x7"
+ },
+ "red-white-stripes-7x7": {
+  "code": "5555555-5555555-5555555-5555555-5555555-5555555-5555555",
+  "size": "7x7"
+ },
+ "blue-yellow-zigzag-7x7": {
+  "code": "1111111-4444444-1111111-4444444-1111111-4444444-1111111",
+  "size": "7x7"
+ },
+ "white-diamonds-4x4": {
+  "code": "5656-8787-5656-8787",
+  "size": "4x4"
+ },
+ "blue-diamonds-4x4": {
+  "code": "3434-2121-3434-2121",
+  "size": "4x4"
+ },
+ "pinwheels-6x6": {
+  "code": "232323-141414-232323-141414-232323-141414",
+  "size": "6x6"
+ },
+ "red-pinwheels-6x6": {
+  "code": "676767-585858-676767-585858-676767-585858",
+  "size": "6x6"
+ },
+ "concentric-diamond-9x9": {
+  "code": "5151r2626-1515b6262-5151r2626-1515b6262-rbrbrbrbr-4848b7373-8484r3737-4848b7373-8484r3737",
+  "size": "9x9"
+ },
+ "concentric-diamond-7x7": {
+  "code": "515b626-151r262-515b626-brbrbrb-848b737-484r373-848b737",
+  "size": "7x7"
+ },
+ "sawtooth-border-9x9": {
+  "code": "r8888888r-6bbbbbbb8-6bwywywb8-6bywywyb8-6bwywywb8-6bywywyb8-6bwywywb8-6bbbbbbb8-r6666666r",
+  "size": "9x9"
+ },
+ "star-6x6": {
+  "code": "ww43ww-ww21ww-24bb31-31bb24-ww43ww-ww21ww",
+  "size": "6x6"
+ }
+}

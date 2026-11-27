@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Render scenes (soft light)</title>
+<style>
+  body { margin: 0; padding: 16px; background: #ECEAE4 url(/img/paper.jpg); font: 14px system-ui, sans-serif; color: #17181B; }
+  #out { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-start; }
+  #out figure { margin: 0; }
+  #out img { display: block; max-width: 900px; max-height: 600px; outline: 1px dashed rgb(0 0 0 / 0.15); }
+  #out figcaption { font-size: 12px; }
+  #status { margin: 0 0 10px; }
+</style>
+</head>
+<body>
+<p id="status">Rendering…</p>
+<div id="out"></div>
+<script type="module">
+// Renders the site's realistic cube pictures from the two 3D cube models (the 3D-printed one and
+// the one scanned from an original), aiming for a photograph rather than a CG frame:
+//   - every cube gets rounded edges built around the model's own faces and textures, so its
+//     edges catch the light (printed 0.9 mm, like an FDM print; original 1.4 mm, worn wood);
+//   - the light is an area light plus a sky dome, made by averaging many renders: half from a
+//     key light jittered across a soft box (soft shadows), half from a single random direction
+//     of the sky (which averages out to ambient occlusion and contact shadows);
+//   - a little gloss and slight per-cube variation in color and gloss; each render is also
+//     nudged by a fraction of a pixel, which antialiases.
+// Each picture has a transparent background with the cubes' shadows, and is posted back to
+// tools/render_scenes.py, which saves it under site/img/art/ (see SCENES there for sizes).
+//
+// Options in the query string: ?only=then-and-now,spill-round (some scenes), ?set=row|pile|mixed (one set
+// of trays, see TRAY_SETS; ?row is ?set=row), ?dry (don't post back),
+// ?n=32 (renders per scene; 128 by default), ?scale=1 (render at 1× instead of 2×),
+// ?tone=none|agx|aces, ?exposure=0.94, ?env=0.3, ?sharp (the models' sharp edges, to compare).
+
+import * as THREE from "/js/vendor/three/three.module.min.js";
+import { GLTFLoader } from "/js/vendor/three/addons/loaders/GLTFLoader.js";
+import { RoomEnvironment } from "/js/vendor/three/addons/environments/RoomEnvironment.js";
+import { parseCode } from "/js/cubecode.js";
+import { trayParts, traySize } from "/js/print3d.js";
+
+const Q = new URLSearchParams(location.search);
+const SCALE = Number(Q.get("scale")) || 2;
+const S = 0.0275;                   // one cube, 27.5 mm
+const SAMPLES = Number(Q.get("n")) || 128;
+const BEVEL = { printed: 0.0009, original: 0.0014 };
+const MODELS = { printed: "/models/color-cube-printed.glb", original: "/models/color-cube.glb" };
+
+function mulberry32(a) {
+  return () => {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// ---- turning a cube to show a tray look on top ----
+// The model (glTF, +Y up, -Z north, +X east): red faces north (-Z), white south, yellow east,
+// blue west; the red/white split face is on top (+Y) and the blue/yellow one underneath, each
+// with its dark triangle toward the north-west corner (docs/rendering.md, section 3).
+const SIDES = { "0,0,-1": 1, "0,0,1": 0, "1,0,0": 2, "-1,0,0": 3, "0,1,0": "rw", "0,-1,0": "by" };
+const DARK = { rw: new THREE.Vector3(-1, 1, -1), by: new THREE.Vector3(-1, -1, -1) };
+const TURNS = (() => {
+  const out = [], seen = new Set();
+  for (let a = 0; a < 4; a++) for (let b = 0; b < 4; b++) for (let c = 0; c < 4; c++) {
+    const q = new THREE.Quaternion().setFromEuler(new THREE.Euler(a * Math.PI / 2, b * Math.PI / 2, c * Math.PI / 2));
+    const key = new THREE.Matrix4().makeRotationFromQuaternion(q).elements.map((v) => Math.round(v)).join();
+    if (!seen.has(key)) { seen.add(key); out.push(q); }
+  }
+  return out;
+})();
+/** Every turn that puts look d on top (tray digits: 0 w, 1 r, 2 y, 3 b, 4–7 blue/yellow, 8–11 red/white). */
+function turnsFor(d) {
+  const CORNER = [[-1, -1], [1, -1], [1, 1], [-1, 1]];  // TL, TR, BR, BL as (x, z) with north up
+  return TURNS.filter((q) => {
+    let top = null;
+    for (const [k, face] of Object.entries(SIDES)) {
+      const n = new THREE.Vector3(...k.split(",").map(Number)).applyQuaternion(q);
+      if (n.y > 0.9) top = face;
+    }
+    if (d < 4) return top === d;
+    if (top !== (d < 8 ? "by" : "rw")) return false;
+    const v = DARK[top].clone().applyQuaternion(q);
+    const [cx, cz] = CORNER[(d - 4) % 4];
+    return Math.sign(Math.round(v.x)) === cx && Math.sign(Math.round(v.z)) === cz;
+  });
+}
+const LOOKS = Array.from({ length: 12 }, (_, d) => turnsFor(d));
+const SPLIT = TURNS.filter((q) => Math.abs(new THREE.Vector3(0, 1, 0).applyQuaternion(q).y) > 0.9);
+const SOLID = TURNS.filter((q) => !SPLIT.includes(q));
+
+// ---- renderer and lights ----
+const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1);
+renderer.autoClear = false;  // every render below clears for itself, so the average can build up
+renderer.setClearColor(0x000000, 0);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = { agx: THREE.AgXToneMapping, aces: THREE.ACESFilmicToneMapping, none: THREE.NoToneMapping }[Q.get("tone") || "none"];
+renderer.toneMappingExposure = Number(Q.get("exposure")) || 0.94;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFShadowMap;
+
+const scene = new THREE.Scene();
+scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = Number(Q.get("env")) || 0.3;  // reflections; it casts no shadows, so keep it low
+
+// Key light high and to the upper left, so shadows fall short, down and to the right.
+const LIGHT = new THREE.Vector3(-0.55, 1.6, -0.35).normalize();
+const KEY = 2.1, SKY = 1.5;  // key and sky strengths (each is on for half the renders, so doubled)
+const KEY_SHADOW = 0.5, SKY_SHADOW = 0.55;
+function shadowLight(size, radius) {
+  const l = new THREE.DirectionalLight(0xffffff, 1);
+  l.castShadow = true;
+  l.shadow.mapSize.set(size, size);
+  l.shadow.radius = radius;
+  l.shadow.bias = -0.0001;
+  l.shadow.normalBias = 0.00015;
+  scene.add(l, l.target);
+  return l;
+}
+const key = shadowLight(4096, 2);
+key.color.set(0xfff3e4);
+const sky = shadowLight(2048, 3);
+sky.color.set(0xeef2ff);
+/** Fit both shadow cameras round a circle on the table (center c, radius r, metres). */
+function shadowArea(c, r) {
+  for (const l of [key, sky]) {
+    Object.assign(l.shadow.camera, { left: -r, right: r, top: r, bottom: -r, near: 0.02, far: 2 });
+    l.shadow.camera.updateProjectionMatrix();
+    l.target.position.copy(c);
+    l.target.updateMatrixWorld();
+  }
+  shadowCenter.copy(c);
+}
+const shadowCenter = new THREE.Vector3();
+
+const floorMat = new THREE.ShadowMaterial({ opacity: 0.3, color: 0x2a2018 });
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(4, 4), floorMat);
+floor.rotation.x = -Math.PI / 2;
+floor.receiveShadow = true;
+scene.add(floor);
+
+const pile = new THREE.Group();
+scene.add(pile);
+const perspective = new THREE.PerspectiveCamera(12, 1, 0.02, 6);
+const topDown = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.02, 3);
+let camera = perspective;
+
+// ---- a cube with rounded edges ----
+// The model is a sharp 27.5 mm box whose split faces have a shallow triangle set into them. Keep
+// its triangles (pulling the outer face corners in by the bevel radius) and add the rounded edges
+// and corners as a band around each face, textured from the same face's part of the texture, so
+// the colors run over the edge the way they do on a real cube.
+function roundedCube(src, BEVEL) {
+  const pos = src.attributes.position, nor = src.attributes.normal, uv = src.attributes.uv;
+  const idx = src.index ? src.index.array : [...Array(pos.count).keys()];
+  const h = S / 2, hi = h - BEVEL, eps = 1e-6;
+  const P = (i) => new THREE.Vector3().fromBufferAttribute(pos, i);
+  const N = (i) => new THREE.Vector3().fromBufferAttribute(nor, i);
+  const axes = [[1, 2], [0, 2], [0, 1]];  // the in-plane axes of a face across x, y or z
+
+  // Each outer face's texture map: uv = a + u * du + v * dv, fitted from its corner vertices.
+  const maps = {};
+  for (let i = 0; i < pos.count; i++) {
+    const p = P(i).toArray(), n = N(i).toArray();
+    const ax = n.findIndex((c) => Math.abs(c) > 0.99);
+    if (ax < 0 || Math.abs(Math.abs(p[ax]) - h) > eps) continue;
+    const [ua, va] = axes[ax];
+    if (Math.abs(Math.abs(p[ua]) - h) > eps || Math.abs(Math.abs(p[va]) - h) > eps) continue;
+    const k = ax + (n[ax] > 0 ? "+" : "-");
+    (maps[k] ||= new Map()).set(`${Math.sign(p[ua])},${Math.sign(p[va])}`, [uv.getX(i), uv.getY(i)]);
+  }
+  for (const k of Object.keys(maps)) {
+    const m = maps[k];
+    const o = m.get("-1,-1"), a = m.get("1,-1"), b = m.get("-1,1");
+    maps[k] = (u, v) => {
+      const s = (u + h) / (2 * h), t = (v + h) / (2 * h);
+      return [o[0] + (a[0] - o[0]) * s + (b[0] - o[0]) * t, o[1] + (a[1] - o[1]) * s + (b[1] - o[1]) * t];
+    };
+  }
+
+  const P3 = [], N3 = [], U2 = [];
+  const tri = (verts) => {
+    const [a, b, c] = verts;
+    const fn = new THREE.Vector3().subVectors(b.p, a.p).cross(new THREE.Vector3().subVectors(c.p, a.p));
+    const avg = a.n.clone().add(b.n).add(c.n);
+    const order = fn.dot(avg) >= 0 ? [a, b, c] : [a, c, b];
+    for (const v of order) { P3.push(...v.p.toArray()); N3.push(...v.n.toArray()); U2.push(...v.uv); }
+  };
+
+  for (let t = 0; t < idx.length; t += 3) {
+    const vs = [idx[t], idx[t + 1], idx[t + 2]].map((i) => ({ p: P(i), n: N(i), uv: [uv.getX(i), uv.getY(i)] }));
+    for (const v of vs) {
+      const p = v.p.toArray(), n = v.n.toArray();
+      const ax = n.findIndex((c) => Math.abs(c) > 0.99);
+      if (ax < 0 || Math.abs(Math.abs(p[ax]) - h) > eps) continue;
+      const [ua, va] = axes[ax];
+      if (Math.abs(p[ua]) < hi && Math.abs(p[va]) < hi) continue;
+      p[ua] = THREE.MathUtils.clamp(p[ua], -hi, hi);
+      p[va] = THREE.MathUtils.clamp(p[va], -hi, hi);
+      v.p.fromArray(p);
+      v.uv = maps[ax + (n[ax] > 0 ? "+" : "-")](p[ua], p[va]);
+    }
+    tri(vs);
+  }
+
+  // A grid line at hi + BEVEL * tan(θ) lands at angle θ on the rounding, so each face takes the
+  // half of every edge (0–45°) and the third of every corner on its own side.
+  const SEG = 5;
+  const line = [];
+  for (let k = SEG; k >= 0; k--) line.push(-(hi + BEVEL * Math.tan((Math.PI / 4) * (k / SEG))));
+  const coords = [...line, ...line.slice().reverse().map((x) => -x)];
+  const mid = SEG;
+  for (let ax = 0; ax < 3; ax++) for (const sgn of [-1, 1]) {
+    const [ua, va] = axes[ax];
+    const map = maps[ax + (sgn > 0 ? "+" : "-")];
+    const vert = (u, v) => {
+      const p = [0, 0, 0];
+      p[ax] = sgn * h; p[ua] = u; p[va] = v;
+      const q = new THREE.Vector3(...p);
+      const c = q.clone().clampScalar(-hi, hi);
+      const n = q.clone().sub(c).normalize();
+      const at = c.clone().addScaledVector(n, BEVEL);
+      const a = at.toArray();
+      return { p: at, n, uv: map(a[ua], a[va]) };
+    };
+    for (let i = 0; i < coords.length - 1; i++) for (let j = 0; j < coords.length - 1; j++) {
+      if (i === mid && j === mid) continue;
+      const v00 = vert(coords[i], coords[j]), v10 = vert(coords[i + 1], coords[j]);
+      const v11 = vert(coords[i + 1], coords[j + 1]), v01 = vert(coords[i], coords[j + 1]);
+      tri([v00, v10, v11]);
+      tri([v00, v11, v01]);
+    }
+  }
+
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.Float32BufferAttribute(P3, 3));
+  g.setAttribute("normal", new THREE.Float32BufferAttribute(N3, 3));
+  g.setAttribute("uv", new THREE.Float32BufferAttribute(U2, 2));
+  return g;
+}
+
+const MODEL = {};
+for (const [finish, url] of Object.entries(MODELS)) {
+  const gltf = await new Promise((res, rej) => new GLTFLoader().load(url, (g) => res(g.scene), undefined, rej));
+  let src;
+  gltf.traverse((o) => { if (o.isMesh) src = o; });
+  const mat = src.material;
+  mat.roughness = finish === "printed" ? 0.46 : 0.62;
+  if (mat.normalMap) mat.normalScale.set(1.1, 1.1);
+  MODEL[finish] = { geo: Q.has("sharp") ? src.geometry : roundedCube(src.geometry, BEVEL[finish]), mat };
+}
+
+/** A printed tray (white PLA unless the scene says) for cols × rows cubes. */
+const trayMats = new Map();
+const trayMat = (hex = 0xf3f1ea) => {
+  if (!trayMats.has(hex)) trayMats.set(hex, new THREE.MeshStandardMaterial({ color: hex, roughness: 0.55 }));
+  return trayMats.get(hex);
+};
+function trayMesh(cols, rows) {
+  const [m] = trayParts(cols, rows);
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.Float32BufferAttribute(m.v.map((v) => v / 1000), 3));
+  g.setIndex(m.t);
+  const flat = g.toNonIndexed();
+  flat.computeVertexNormals();
+  const s = traySize(cols, rows);
+  flat.translate(-s.w / 2000, -s.h / 2000, 0);
+  flat.rotateX(-Math.PI / 2);  // print3d's z up is three's y up; its +y runs north (-z)
+  return flat;
+}
+
+/** A display tray with a wide frame (wall in metres) round the printed tray's pocket. */
+function framedTray(cols, rows, wall) {
+  const s = traySize(cols, rows), pw = s.pocketW / 1000, ph = s.pocketH / 1000;
+  const W = pw + 2 * wall, H = ph + 2 * wall, r = 0.003, bevel = 0.0008;
+  const shape = new THREE.Shape();
+  const x0 = -W / 2 + bevel, x1 = W / 2 - bevel, y0 = -H / 2 + bevel, y1 = H / 2 - bevel;
+  shape.moveTo(x0 + r, y0); shape.lineTo(x1 - r, y0); shape.absarc(x1 - r, y0 + r, r, -Math.PI / 2, 0);
+  shape.lineTo(x1, y1 - r); shape.absarc(x1 - r, y1 - r, r, 0, Math.PI / 2);
+  shape.lineTo(x0 + r, y1); shape.absarc(x0 + r, y1 - r, r, Math.PI / 2, Math.PI);
+  shape.lineTo(x0, y0 + r); shape.absarc(x0 + r, y0 + r, r, Math.PI, Math.PI * 1.5);
+  const hole = new THREE.Path();
+  hole.moveTo(-pw / 2 - bevel, -ph / 2 - bevel); hole.lineTo(-pw / 2 - bevel, ph / 2 + bevel);
+  hole.lineTo(pw / 2 + bevel, ph / 2 + bevel); hole.lineTo(pw / 2 + bevel, -ph / 2 - bevel);
+  shape.holes.push(hole);
+  const g = new THREE.ExtrudeGeometry(shape, { depth: 0.018 - 2 * bevel, bevelEnabled: true, bevelThickness: bevel, bevelSize: bevel, bevelSegments: 3, curveSegments: 8 });
+  g.translate(0, 0, bevel);
+  g.rotateX(-Math.PI / 2);
+  const floor = new THREE.BoxGeometry(pw + 0.002, 0.003, ph + 0.002).translate(0, 0.0015, 0);
+  return [g, floor];
+}
+/** Outside size of a scene's tray in mm, framed or not. */
+function trayOutside(t) {
+  const s = traySize(t.cols, t.rows);
+  return t.frame ? { w: s.pocketW + 2000 * t.frame, h: s.pocketH + 2000 * t.frame } : s;
+}
+
+// ---- scenes ----
+// A scene is { w, h, cubes: [{ x, y?, z, yaw, d? | q?, finish }], trays?, view, fade }.
+//   view: { pitch (degrees from the table), azimuth (degrees, 0 = looking north), fov, margin }
+//   or a fixed camera ({ fixed: [x, y, z] looking at the origin }).
+
+/** Cubes laid out as a tray code at (x, z), turned by yaw, with a hand-placed wobble. */
+function laid(code, { x = 0, z = 0, yaw = 0, finish = "printed", rng, gap = 0.0005, tray = false, wobble = 1, trayColor, frame }) {
+  const t = parseCode(code);
+  if (!t) throw new Error("bad code " + code);
+  // In a tray the cubes are the printed size (26.95 mm), so they fit its pocket.
+  const size = tray ? 0.02695 : S;
+  const pitch = tray ? size + 0.0002 : S + gap;
+  const cubes = [];
+  const c = Math.cos(yaw), s = Math.sin(yaw);
+  const floorY = tray ? 0.003 : 0;
+  for (let r = 0; r < t.h; r++) for (let col = 0; col < t.w; col++) {
+    const lx = (col - (t.w - 1) / 2) * pitch + (rng() - 0.5) * 0.0003 * wobble;
+    const lz = (r - (t.h - 1) / 2) * pitch + (rng() - 0.5) * 0.0003 * wobble;
+    cubes.push({
+      x: x + lx * c + lz * s, z: z - lx * s + lz * c, y: floorY + size / 2, size,
+      yaw: yaw + (rng() - 0.5) * 0.02 * wobble, d: t.grid[r * t.w + col], finish
+    });
+  }
+  return { cubes, tray: tray ? { cols: t.w, rows: t.h, x, z, yaw, color: trayColor, frame } : null };
+}
+
+/** Overlap of two squares on the table (center x, z, yaw, side S). Separating axis test. */
+function overlap(a, b, gap = 0.0004) {
+  const corners = (c) => [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([u, v]) => {
+    const s = (S + gap) / 2, cos = Math.cos(c.yaw), sin = Math.sin(c.yaw);
+    return [c.x + u * s * cos + v * s * sin, c.z - u * s * sin + v * s * cos];
+  });
+  const A = corners(a), B = corners(b);
+  for (const poly of [A, B]) {
+    for (let i = 0; i < 4; i++) {
+      const [x1, y1] = poly[i], [x2, y2] = poly[(i + 1) % 4];
+      const nx = y2 - y1, ny = x1 - x2;
+      const pa = A.map(([x, y]) => x * nx + y * ny), pb = B.map(([x, y]) => x * nx + y * ny);
+      if (Math.max(...pa) < Math.min(...pb) || Math.max(...pb) < Math.min(...pa)) return false;
+    }
+  }
+  return true;
+}
+
+// Original cubes: one lid design laid out in a 7 × 7 block, seen at an angle.
+function trayOriginalScene() {
+  const rng = mulberry32(9);
+  const g = laid("7rrrrr8-r31313r-r15551r-r35553r-r15551r-r31313r-6rrrrr5", { yaw: 0.04, finish: "original", rng, gap: 0.0003, wobble: 1.2 });
+  return { w: 1200, h: 840, seed: 9, ...merge([g]), view: { pitch: 40, azimuth: -18, fov: 14, margin: 0.03 }, fade: { soft: true } };
+}
+
+// Original cubes: three small patterns side by side, and a few loose cubes.
+function blocksOriginalScene() {
+  const rng = mulberry32(21);
+  const groups = [
+    laid("56-87", { x: -0.12, z: 0.0, yaw: 0.22, finish: "original", rng, wobble: 2 }),
+    laid("7w8-rrr-6r5", { x: 0.0, z: -0.012, yaw: -0.08, finish: "original", rng, wobble: 2 }),
+    laid("b12b-1yy2-4yy3-b43b", { x: 0.14, z: 0.01, yaw: 0.12, finish: "original", rng, wobble: 2 })
+  ];
+  const loose = [];
+  for (const [x, z, d] of [[-0.075, 0.075, 2], [-0.15, -0.07, 9], [0.045, 0.085, 3], [0.06, -0.09, 0], [-0.03, -0.085, 5]]) {
+    loose.push({ x, z, y: S / 2, yaw: rng() * Math.PI, d, finish: "original" });
+  }
+  const m = merge(groups);
+  m.cubes.push(...loose);
+  return { w: 1400, h: 760, seed: 21, ...m, view: { pitch: 55, azimuth: 0, fov: 14, margin: 0.03 }, fade: { soft: true } };
+}
+
+// Printed cubes spilled along a table, seen low from the front: a long strip for the page's foot.
+function spillScene() {
+  const rng = mulberry32(77);
+  const cubes = [];
+  let tries = 0;
+  while (cubes.length < 34 && tries++ < 20000) {
+    const c = {
+      x: (rng() - 0.5) * 0.78, z: (rng() + rng() + rng() - 1.5) * 0.05,
+      yaw: rng() * Math.PI * 2, y: S / 2, finish: "printed"
+    };
+    if (cubes.some((o) => overlap(o, c, 0.004))) continue;
+    cubes.push(c);
+  }
+  for (const c of cubes) { const set = rng() < 0.55 ? SPLIT : SOLID; c.q = set[Math.floor(rng() * set.length)]; }
+  // One cube resting on another.
+  const base = cubes[Math.floor(cubes.length * 0.62)];
+  cubes.push({ x: base.x + 0.004, z: base.z - 0.003, y: S * 1.5 + 0.0002, yaw: base.yaw + 0.5, q: SPLIT[3], finish: "printed" });
+  return { w: 2400, h: 300, seed: 77, cubes, trays: [], view: { pitch: 17, azimuth: 0, fov: 9, margin: 0.012 }, fade: { soft: true } };
+}
+
+/** Loose cubes scattered in a box on the table, kept clear of each other and of `avoid` boxes
+    ({ x0, x1, z0, z1 }). Split faces up 60% of the time. */
+function scatter(rng, n, area, finish, avoid = [], placed = []) {
+  const out = [];
+  for (let t = 0; out.length < n && t < 20000; t++) {
+    const c = { x: area.x0 + rng() * (area.x1 - area.x0), z: area.z0 + rng() * (area.z1 - area.z0), y: S / 2, yaw: rng() * Math.PI * 2, finish };
+    if (avoid.some((b) => c.x > b.x0 - S && c.x < b.x1 + S && c.z > b.z0 - S && c.z < b.z1 + S)) continue;
+    if ([...placed, ...out].some((o) => overlap(o, c, 0.006))) continue;
+    out.push(c);
+  }
+  for (const c of out) { const set = rng() < 0.6 ? SPLIT : SOLID; c.q = set[Math.floor(rng() * set.length)]; }
+  return out;
+}
+// The home page hero: then and now. The same design laid out twice, original cubes on the left
+// and printed on the right, with a few loose cubes of each between them.
+function thenAndNowScene() {
+  const rng = mulberry32(311);
+  const code = "b3y4b-3yry4-yrrry-2yry1-b2y1b";
+  const groups = [
+    laid(code, { x: -0.105, z: 0, yaw: 0.07, finish: "original", rng, wobble: 2.2 }),
+    laid(code, { x: 0.105, z: 0, yaw: -0.05, finish: "printed", rng, wobble: 1.2 })
+  ];
+  const m = merge(groups);
+  const lane = [{ x0: -0.18, x1: -0.03, z0: -0.075, z1: 0.075 }, { x0: 0.03, x1: 0.18, z0: -0.075, z1: 0.075 }];
+  m.cubes.push(...scatter(rng, 2, { x0: -0.03, x1: 0.0, z0: -0.02, z1: 0.1 }, "original", lane));
+  m.cubes.push(...scatter(rng, 2, { x0: 0.0, x1: 0.03, z0: -0.1, z1: 0.06 }, "printed", lane, m.cubes.slice(-2)));
+  return { w: 2000, h: 1025, seed: 311, ...m, view: { pitch: 50, azimuth: 0, fov: 13, margin: 0.03 }, fade: { soft: true } };
+}
+
+// Small stand-ins on the Files page for files that aren't pictures: one cube of each finish, a
+// plate of cubes and an empty tray.
+function thumbCubeScene(finish, seed) {
+  return { w: 240, h: 240, seed, cubes: [{ x: 0, z: 0, y: S / 2, yaw: 0.6, q: SPLIT[2], finish }], trays: [], view: { pitch: 34, azimuth: -20, fov: 14, margin: 0.14 }, fade: { soft: true } };
+}
+function thumbPlateScene() {
+  const rng = mulberry32(401);
+  const cubes = [];
+  for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) {
+    const set = (r + c) % 2 ? SOLID : SPLIT;
+    cubes.push({ x: (c - 1) * (S + 0.003), z: (r - 1) * (S + 0.003), y: S / 2, yaw: 0, q: set[Math.floor(rng() * set.length)], finish: "printed" });
+  }
+  return { w: 240, h: 240, seed: 401, cubes, trays: [], view: { pitch: 50, azimuth: -20, fov: 14, margin: 0.06 }, fade: { soft: true } };
+}
+function thumbTrayScene() {
+  return { w: 240, h: 240, seed: 402, cubes: [], trays: [{ cols: 3, rows: 3, x: 0, z: 0, yaw: 0, color: 0xf3f1ea }], view: { pitch: 50, azimuth: -20, fov: 14, margin: 0.06 }, fade: { soft: true } };
+}
+
+// A check: the twelve looks in a row, top down, printed then original (compare with the designer).
+function looksScene() {
+  const cubes = [];
+  for (let d = 0; d < 12; d++) for (const [i, finish] of ["printed", "original"].entries()) {
+    cubes.push({ x: (d - 5.5) * (S + 0.006), z: (i - 0.5) * (S + 0.01), y: S / 2, yaw: 0, d, finish });
+  }
+  return { w: 1600, h: 300, seed: 1, cubes, trays: [], view: { pitch: 89.9, azimuth: 0, fov: 10, margin: 0.01 }, fade: { soft: true }, test: true };
+}
+
+// Trays of designs, each on its own transparent picture with room for its shadow, seen from above
+// and a little in front with no perspective, so every tray is to the same scale. The pages turn
+// each one a little and straighten it on hover. Each set is saved as site/img/{dir}/{code}.webp
+// and a half-size copy; render one with ?set=row (or pile, mixed).
+const TRAY_SETS = {
+  // The home page's row: printed cubes in white printed trays.
+  row: {
+    dir: "trays", tray: 0xf3f1ea, px: 1.31, finish: () => "printed",
+    codes: [
+      "b12b-1yy2-4yy3-b43b", "5757r57-757r575-57r575w-7r575w7-r575w75-575w757-75w7575", "b3y4b-3yry4-yrrry-2yry1-b2y1b",
+      "rr56rr-r5ww6r-5wwww6-8wwww7-r8ww7r-rr87rr", "7rrrrr8-r31313r-r15551r-r35553r-r15551r-r31313r-6rrrrr5",
+      "ww7rrr8ww-w7rbbbr8w-7rbyyybr8-rbyybyybr-rbybbbybr-rbyybyybr-6rbyyybr5-w6rbbbr5w-ww6rrr5ww", "3784-7rr8-6rr5-2651",
+      "686w313-868w131-686w313-wwwwwww-313w686-131w868-313w686", "bbbbbb-b1yy2b-byrryb-byrryb-b4yy3b-bbbbbb",
+      "57578686-75756868-57578686-75756868-68687575-86865757-68687575-86865757", "b87r87b-6b1y2b5-713b428-rybbbyr-642b135-7b4y3b8-b56r56b",
+      "ww7ww-w7r8w-7rrr8-w6r5w-ww6ww", "wwww78wwww-www7rr8www-ww7rbbr8ww-w7rbyybr8w-7rbyyyybr8-6rbyyyybr5-w6rbyybr5w-ww6rbbr5ww-www6rr5www-wwww65wwww"
+    ]
+  },
+  // The same designs in the original cubes in dark trays, as the home page's row first was: the
+  // History page's foot, laid out as a fan by tools/build_tray_fan.mjs.
+  original: {
+    dir: "trays-original", tray: 0x121a3c, px: 1.31, finish: () => "original",
+    get codes() { return TRAY_SETS.row.codes; }
+  },
+  // Printed cubes in near-black framed trays, big (was the patterns page's header; unused now).
+  pile: {
+    dir: "trays-pile", tray: 0x0b1029, px: 2.1, finish: () => "printed", frame: 0.0075,
+    codes: [
+      "yyyybyyyy-yyy3b4yyy-yy3bbb4yy-yyybbbyyy-yybbbbbyy-yy3bbb4yy-y3bbbbb4y-yyyyryyyy-yyyyyyyyy",
+      "ww7rrr8ww-w7rbbbr8w-7rbyyybr8-rbyybyybr-rbybbbybr-rbyybyybr-6rbyyybr5-w6rbbbr5w-ww6rrr5ww",
+      "wwwwwwww-wwww8www-www8r8ww-ww75rrww-w7r5rr8w-wyyyyyyw-bb3333bb-bbbbbbbb",
+      "wwwwwwww-w7r87r8w-7rrrrrr8-rrrrrrrr-6rrrrrr5-w6rrrr5w-ww6rr5ww-www65www"
+    ]
+  },
+  // A try-out for the home page's row: printed and original cubes taking turns, in white trays.
+  mixed: {
+    dir: "trays-mixed", tray: 0xeeebe3, px: 1.31, finish: (i) => (i % 2 ? "original" : "printed"),
+    codes: [
+      "yyyyyyy-yy3b4yy-y3bbb4y-yy3b4yy-y3bbb4y-3bbbbb4-yyyryyy",
+      "ww7rrr8ww-w7rbbbr8w-7rbyyybr8-rbyybyybr-rbybbbybr-rbyybyybr-6rbyyybr5-w6rbbbr5w-ww6rrr5ww",
+      "wwwwwwww-wwww8www-www8r8ww-ww75rrww-w7r5rr8w-wyyyyyyw-bb3333bb-bbbbbbbb",
+      "rr56rr-r5ww6r-5wwww6-8wwww7-r8ww7r-rr87rr",
+      "wwwwwwww-w7r87r8w-7rrrrrr8-rrrrrrrr-6rrrrrr5-w6rrrr5w-ww6rr5ww-www65www",
+      "yyyyyyyyy-yyyyyyyyy-yybbbbbyy-yybybybyy-yybbbbbyy-yybrrrbyy-yybbbbbyy-yyyyyyyyy-yyyyyyyyy",
+      "7rrrrr8-r31313r-r15551r-r35553r-r15551r-r31313r-6rrrrr5",
+      "wwwwwwwww-www7r8www-ww7rrr8ww-w7rrrrr8w-wwyyyyyww-wwyybyyww-wwyybyyww-wwyybyyww-wwwwwwwww",
+      "bbbbbbbbbb-bbbbbbbbbb-bbbbbbbbbb-bb1yyy2b12-b12yyyyyy2-b4yyyyyyy2-bb4yyy3b42-bbbbbbbbbb-bbbbbbbbbb-bbbbbbbbbb",
+      "yyyyyyyyy-yy4yyy3yy-yybbbbbyy-y3bbbbb4y-yybybybyy-yybbbbbyy-yy2bbb1yy-yyy2b1yyy-yyyyyyyyy",
+      "5757r57-757r575-57r575w-7r575w7-r575w75-575w757-75w7575",
+      "wwwwwwwww-wwwwwwwww-www8788ww-wwwrrr5ww-www6rr5ww-wwww6wwww-wwwwbwwww-wwwwbwwww-wwwwwwwww",
+      "bbbbbbbbbb-bbbbbbbbbb-bbbb12bbbb-b2bbyybb1b-by21yy21yb-byyyyyyyyb-byryrryryb-byyyyyyyyb-bbbbbbbbbb-bbbbbbbbbb"
+    ]
+  }
+};
+const TRAY_MARGIN = 0.012;  // metres of table round the tray, for its shadow
+const TRAY_PITCH = 70;      // the camera's angle above the table, degrees
+function trayScene(set, code, i) {
+  const rng = mulberry32(100 + i);
+  const g = laid(code, { tray: true, rng, trayColor: set.tray, finish: set.finish(i), wobble: 1.5, frame: set.frame });
+  const s = trayOutside(g.tray);
+  // Frame the tray (floor to the cubes' tops) in the camera's view, plus the margin.
+  const pitch = THREE.MathUtils.degToRad(TRAY_PITCH);
+  const dir = new THREE.Vector3(0, Math.sin(pitch), Math.cos(pitch));
+  const right = new THREE.Vector3(1, 0, 0), up = new THREE.Vector3().crossVectors(dir, right);
+  let y0 = Infinity, y1 = -Infinity;
+  for (const z of [-s.h / 2000, s.h / 2000]) for (const y of [0, 0.0305]) {
+    const v = new THREE.Vector3(0, y, z).dot(up);
+    y0 = Math.min(y0, v); y1 = Math.max(y1, v);
+  }
+  const wm = s.w / 1000 + 2 * TRAY_MARGIN;
+  const box = { left: -wm / 2, right: wm / 2, bottom: y0 - TRAY_MARGIN, top: y1 + TRAY_MARGIN, dir };
+  return {
+    w: Math.round(wm * 1000 * set.px), h: Math.round((box.top - box.bottom) * 1000 * set.px), seed: 100 + i, ...merge([g]),
+    ortho: box, fade: { soft: true }, widths: [1, 0.5], file: set.dir + "/" + code
+  };
+}
+
+function merge(groups) {
+  return { cubes: groups.flatMap((g) => g.cubes), trays: groups.map((g) => g.tray).filter(Boolean) };
+}
+
+const SCENES = {
+  "tray-original-round": trayOriginalScene,
+  "blocks-original": blocksOriginalScene,
+  "spill-round": spillScene,
+  "then-and-now": thenAndNowScene,
+  "thumb-cube": () => thumbCubeScene("printed", 403),
+  "thumb-cube-original": () => thumbCubeScene("original", 404),
+  "thumb-plate": thumbPlateScene,
+  "thumb-tray": thumbTrayScene,
+  "looks": looksScene
+};
+for (const [key, set] of Object.entries(TRAY_SETS)) {
+  set.codes.forEach((code, i) => { SCENES[set.dir + "/" + code] = () => trayScene(set, code, i); });
+}
+
+// ---- camera ----
+function setCamera(view, W, H, pts) {
+  camera.aspect = W / H;
+  camera.fov = view.fov;
+  camera.updateProjectionMatrix();
+  if (view.fixed) {
+    camera.position.set(...view.fixed);
+    camera.lookAt(0, 0, 0);
+    camera.updateMatrixWorld();
+    return;
+  }
+  // Aim at the middle of the points, then move back until every point is inside the margin.
+  const box = new THREE.Box3().setFromPoints(pts);
+  const center = box.getCenter(new THREE.Vector3());
+  const pitch = THREE.MathUtils.degToRad(view.pitch), az = THREE.MathUtils.degToRad(view.azimuth || 0);
+  const dir = new THREE.Vector3(Math.sin(az) * Math.cos(pitch), Math.sin(pitch), Math.cos(az) * Math.cos(pitch));
+  const at = (dist) => {
+    camera.position.copy(center).addScaledVector(dir, dist);
+    camera.lookAt(center);
+    camera.updateMatrixWorld();
+    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+    for (const p of pts) {
+      const v = p.clone().project(camera);
+      x0 = Math.min(x0, v.x); x1 = Math.max(x1, v.x); y0 = Math.min(y0, v.y); y1 = Math.max(y1, v.y);
+    }
+    return { x0, x1, y0, y1 };
+  };
+  const m = 1 - 2 * view.margin;
+  let lo = 0.05, hi = 5;
+  for (let i = 0; i < 40; i++) {
+    const mid = (lo + hi) / 2, b = at(mid);
+    const fits = b.x0 > -m && b.x1 < m && b.y0 > -m && b.y1 < m;
+    if (fits) hi = mid; else lo = mid;
+  }
+  const b = at(hi);
+  // Re-aim so the picture is centered on its contents.
+  const ndc = new THREE.Vector3((b.x0 + b.x1) / 2, (b.y0 + b.y1) / 2, 0.5).unproject(camera);
+  const ray = ndc.sub(camera.position).normalize();
+  const shift = new THREE.Vector3().copy(camera.position).addScaledVector(ray, (camera.position.y - center.y) / -ray.y).sub(center);
+  shift.y = 0;
+  center.add(shift);
+  at(hi);
+}
+
+/** Points that must be in the frame: each cube's corners and where its shadow falls. */
+function framePoints(sc) {
+  const pts = [];
+  const h = S / 2 + 0.0003;
+  for (const c of sc.cubes) for (const sx of [-1, 1]) for (const sy of [-1, 1]) for (const sz of [-1, 1]) {
+    const p = new THREE.Vector3(sx * h, sy * h, sz * h).applyAxisAngle(new THREE.Vector3(0, 1, 0), c.yaw).add(new THREE.Vector3(c.x, c.y, c.z));
+    pts.push(p);
+    if (sy > 0) pts.push(p.clone().sub(LIGHT.clone().multiplyScalar(p.y / LIGHT.y * 0.6)));
+  }
+  for (const t of sc.trays || []) {
+    const s = traySize(t.cols, t.rows);
+    for (const u of [-1, 1]) for (const v of [-1, 1]) {
+      const lx = u * s.w / 2000, lz = v * s.h / 2000, c = Math.cos(t.yaw), sn = Math.sin(t.yaw);
+      pts.push(new THREE.Vector3(t.x + lx * c + lz * sn, 0.018, t.z - lx * sn + lz * c));
+    }
+  }
+  return pts;
+}
+
+// ---- averaging many renders ----
+const quadCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+const quadGeo = new THREE.PlaneGeometry(2, 2);
+const addMat = new THREE.ShaderMaterial({
+  uniforms: { tex: { value: null }, w: { value: 1 } },
+  vertexShader: "varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }",
+  fragmentShader: "uniform sampler2D tex; uniform float w; varying vec2 vUv; void main() { gl_FragColor = texture2D(tex, vUv) * w; }",
+  blending: THREE.CustomBlending, blendSrc: THREE.OneFactor, blendDst: THREE.OneFactor,
+  blendSrcAlpha: THREE.OneFactor, blendDstAlpha: THREE.OneFactor, depthTest: false, depthWrite: false
+});
+const addScene = new THREE.Scene();
+addScene.add(new THREE.Mesh(quadGeo, addMat));
+// The soft shadows and the sky's occlusion lay a faint shade over the table, which would show as
+// a box against the page. Corners fade the table out along an ellipse round the page corner; other
+// scenes keep the shade only where it is at least faintly dark and fade out the frame's edges.
+const fadeMat = new THREE.ShaderMaterial({
+  uniforms: {
+    tex: { value: null }, edges: { value: new THREE.Vector4() }, band: { value: new THREE.Vector2() },
+    corner: { value: new THREE.Vector2() }, radii: { value: new THREE.Vector2(1, 1) }, r0: { value: 0.72 }, soft: { value: 0 }
+  },
+  vertexShader: "varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }",
+  fragmentShader: `uniform sampler2D tex; uniform vec4 edges; uniform vec2 band; uniform vec2 corner; uniform vec2 radii; uniform float r0; uniform float soft; varying vec2 vUv;
+    void main() {
+      vec4 c = texture2D(tex, vUv);
+      vec2 d = abs(vUv - corner) / radii;
+      float table = mix(1.0 - smoothstep(r0, 1.0, length(d)), smoothstep(0.012, 0.05, c.a), soft);
+      float cube = smoothstep(0.6, 0.98, c.a);
+      float f = 1.0;
+      f *= mix(1.0, smoothstep(0.0, band.x, vUv.x), edges.x);
+      f *= mix(1.0, smoothstep(0.0, band.x, 1.0 - vUv.x), edges.y);
+      f *= mix(1.0, smoothstep(0.0, band.y, 1.0 - vUv.y), edges.z);
+      f *= mix(1.0, smoothstep(0.0, band.y, vUv.y), edges.w);
+      gl_FragColor = c * f * mix(table, 1.0, cube);
+    }`,
+  blending: THREE.NoBlending, depthTest: false, depthWrite: false
+});
+const fadeScene = new THREE.Scene();
+fadeScene.add(new THREE.Mesh(quadGeo, fadeMat));
+const outMat = new THREE.MeshBasicMaterial({ blending: THREE.NoBlending, depthTest: false });
+const outScene = new THREE.Scene();
+outScene.add(new THREE.Mesh(quadGeo, outMat));
+
+async function accumulate(rng, RW, RH) {
+  const sampleRT = new THREE.WebGLRenderTarget(RW, RH, { type: THREE.HalfFloatType, depthBuffer: true });
+  const accRT = new THREE.WebGLRenderTarget(RW, RH, { type: THREE.FloatType, depthBuffer: false });
+  const fadeRT = new THREE.WebGLRenderTarget(RW, RH, { type: THREE.FloatType, depthBuffer: false });
+  addMat.uniforms.tex.value = sampleRT.texture;
+  fadeMat.uniforms.tex.value = accRT.texture;
+  outMat.map = fadeRT.texture;
+  outMat.needsUpdate = true;
+  renderer.setRenderTarget(accRT);
+  renderer.setClearColor(0x000000, 0);
+  renderer.clear();
+  addMat.uniforms.w.value = 1 / SAMPLES;
+  const up = new THREE.Vector3(0, 1, 0);
+  const side = new THREE.Vector3().crossVectors(LIGHT, up).normalize();
+  const side2 = new THREE.Vector3().crossVectors(LIGHT, side).normalize();
+  for (let i = 0; i < SAMPLES; i++) {
+    camera.setViewOffset(RW, RH, rng() - 0.5, rng() - 0.5, RW, RH);
+    if (i % 2 === 0) {
+      const r = 0.12 * Math.sqrt(rng()), a = rng() * Math.PI * 2;
+      const d = LIGHT.clone().addScaledVector(side, r * Math.cos(a)).addScaledVector(side2, r * Math.sin(a)).normalize();
+      key.position.copy(shadowCenter).addScaledVector(d, 1);
+      key.intensity = KEY; key.visible = true;
+      sky.visible = false;
+      floorMat.opacity = KEY_SHADOW;
+    } else {
+      // One direction of the sky dome, cosine weighted and kept above 40°, so its shadows stay
+      // near the cubes.
+      let d;
+      do {
+        const r = Math.sqrt(rng()), a = rng() * Math.PI * 2;
+        d = new THREE.Vector3(r * Math.cos(a), Math.sqrt(Math.max(0, 1 - r * r)), r * Math.sin(a));
+      } while (d.y < Math.sin(THREE.MathUtils.degToRad(40)));
+      sky.position.copy(shadowCenter).addScaledVector(d, 1);
+      sky.intensity = SKY; sky.visible = true;
+      key.visible = false;
+      floorMat.opacity = SKY_SHADOW;
+    }
+    renderer.setRenderTarget(sampleRT);
+    renderer.setClearColor(0x000000, 0);
+    renderer.clear();
+    renderer.render(scene, camera);
+    renderer.setRenderTarget(accRT);
+    renderer.render(addScene, quadCam);
+    if (i % 8 === 7) await new Promise((r) => setTimeout(r, 0));
+  }
+  camera.clearViewOffset();
+  renderer.setRenderTarget(fadeRT);
+  renderer.render(fadeScene, quadCam);
+  renderer.setRenderTarget(null);
+  renderer.setClearColor(0x000000, 0);
+  renderer.clear();
+  renderer.render(outScene, quadCam);
+  sampleRT.dispose(); accRT.dispose(); fadeRT.dispose();
+}
+
+async function render(name) {
+  const sc = SCENES[name]();
+  const W = sc.w, H = sc.h, K = sc.ortho ? Math.max(SCALE, 3) : SCALE, RW = W * K, RH = H * K;
+  renderer.setSize(RW, RH, false);
+  camera = sc.ortho ? topDown : perspective;
+  if (sc.ortho) {
+    const { left, right, top, bottom, dir } = sc.ortho;
+    Object.assign(topDown, { left, right, top, bottom });
+    topDown.position.copy(dir);
+    topDown.up.set(0, 1, 0);
+    topDown.lookAt(0, 0, 0);
+    topDown.updateProjectionMatrix();
+    topDown.updateMatrixWorld();
+  } else if (!sc.fixedCamera) setCamera(sc.view, W, H, framePoints(sc));
+  // Shadows: a circle round everything in the scene.
+  if (sc.shadow) shadowArea(...sc.shadow);
+  else {
+    const box = new THREE.Box3().setFromPoints(framePoints(sc));
+    const c = box.getCenter(new THREE.Vector3()); c.y = 0;
+    shadowArea(c, box.getSize(new THREE.Vector3()).length() / 2 + 0.03);
+  }
+  const f = sc.fade;
+  fadeMat.uniforms.band.value.set(10 / W, 10 / H);
+  if (f.soft) {
+    fadeMat.uniforms.soft.value = 1;
+    fadeMat.uniforms.edges.value.set(1, 1, 1, 1);
+  } else {
+    fadeMat.uniforms.soft.value = 0;
+    fadeMat.uniforms.edges.value.set(...f.edges);
+    fadeMat.uniforms.corner.value.set(...f.corner);
+    fadeMat.uniforms.radii.value.set(...f.radii);
+    fadeMat.uniforms.r0.value = f.r0;
+  }
+
+  const vary = mulberry32(sc.seed * 7919);  // per-cube variation
+  const pick = mulberry32(sc.seed * 17 + 3);
+  pile.clear();
+  for (const c of sc.cubes) {
+    const { geo, mat: base } = MODEL[c.finish];
+    const mat = base.clone();
+    const spread = c.finish === "original" ? 0.1 : 0.06;
+    const tint = 1 + (vary() - 0.5) * spread;
+    mat.color.setRGB(tint * (1 + (vary() - 0.5) * 0.015), tint, tint * (1 + (vary() - 0.5) * 0.015));
+    mat.roughness = base.roughness - 0.04 + vary() * 0.1;
+    const cube = new THREE.Mesh(geo, mat);
+    cube.castShadow = cube.receiveShadow = true;
+    const q = c.q || (() => {
+      const all = LOOKS[c.d];
+      return all[Math.floor(pick() * all.length)];
+    })();
+    cube.quaternion.copy(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), c.yaw).multiply(q));
+    cube.position.set(c.x, c.y, c.z);
+    if (c.size) cube.scale.setScalar(c.size / S);
+    pile.add(cube);
+  }
+  for (const t of sc.trays || []) {
+    const m = new THREE.Group();
+    for (const geo of t.frame ? framedTray(t.cols, t.rows, t.frame) : [trayMesh(t.cols, t.rows)]) {
+      const part = new THREE.Mesh(geo, trayMat(t.color));
+      part.castShadow = part.receiveShadow = true;
+      m.add(part);
+    }
+    m.rotation.y = t.yaw;
+    m.position.set(t.x, 0, t.z);
+    pile.add(m);
+  }
+
+  const t0 = performance.now();
+  await accumulate(mulberry32(sc.seed * 31 + 5), RW, RH);
+  const ms = performance.now() - t0;
+  const blob = await new Promise((r) => renderer.domElement.toBlob(r, "image/png"));
+  const fig = document.createElement("figure");
+  const img = document.createElement("img");
+  img.src = URL.createObjectURL(blob);
+  fig.append(img, Object.assign(document.createElement("figcaption"), { textContent: name }));
+  document.getElementById("out").append(fig);
+  if (!Q.has("dry") && !sc.test) {
+    const q = sc.file ? "&file=" + encodeURIComponent(sc.file) + "&widths=" + sc.widths.map((f) => Math.round(W * f)).join(",") : "";
+    await fetch("/save?name=" + encodeURIComponent(name) + q, { method: "POST", body: blob });
+  }
+  return `${name} ${sc.cubes.length} cubes ${(ms / 1000).toFixed(1)} s`;
+}
+
+const done = [];
+const set = TRAY_SETS[Q.get("set") || (Q.has("row") ? "row" : "")];
+const names = Q.get("only") ? Q.get("only").split(",")
+  : set ? set.codes.map((code) => set.dir + "/" + code)
+  : Object.keys(SCENES).filter((n) => n !== "looks" && !n.includes("/"));
+for (const name of names) {
+  done.push(await render(name));
+  document.getElementById("status").textContent = "Rendered (" + SAMPLES + " each): " + done.join(", ") + "…";
+}
+document.getElementById("status").textContent = "Done (" + SAMPLES + " renders each): " + done.join(", ") + ".";
+if (!Q.has("dry")) await fetch("/done", { method: "POST" });
+window.done = true;
+</script>
+</body>
+</html>

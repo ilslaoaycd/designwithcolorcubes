@@ -1,0 +1,24 @@
+// Main site: static files from site/ plus a tiny script for /designer/{tray code}.
+// Deploy: npm run deploy:site
+{
+  "name": "designwithcolorcubes",
+  "account_id": "c343fe40d7c3c808f314aaec931c5204", // Cloudflare account "Personal Projects"
+  "main": "src/index.js",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "../../site",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page",
+    // Static files are served first, free of Worker runs. Only these paths run src/index.js:
+    // the designer's page addresses (/designer/{code}) and link pictures (/designer/og/...), and
+    // the box designer's and print page's addresses (/box/7x7/{box code}, /print/7x7/{box code}).
+    // Its scripts and stylesheet are plain files, so they skip the Worker (on the free plan
+    // every Worker run counts toward 100,000 a day; static files are free and unlimited).
+    "run_worker_first": ["/designer/*", "!/designer/*.js", "!/designer/*.css", "/box/*", "!/box/*.js", "!/box/*.css", "/print/*", "!/print/*.js", "!/print/*.css"]
+  },
+  "workers_dev": false,
+  "preview_urls": false,
+  // The www and .com hostnames redirect here from the colorcubes-redirects Worker.
+  "routes": [{ "pattern": "designwithcolorcubes.org", "custom_domain": true }]
+}

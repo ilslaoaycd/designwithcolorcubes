@@ -1,0 +1,201 @@
+# Response headers for the static files (Workers static assets). Not served as a file.
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/js/vendor/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/img/*
+  Cache-Control: public, max-age=86400
+
+# The history notes have accented names; say they're UTF-8.
+/history/*.md
+  Content-Type: text/markdown; charset=utf-8
+
+/models/*
+  Cache-Control: public, max-age=86400
+
+/agents.md
+  Content-Type: text/markdown; charset=utf-8
+
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+
+/files/*
+  Cache-Control: public, max-age=86400
+
+# --- print files (tools/build_print_files.mjs) ---
+/files/3mf/color-cube.3mf
+  Content-Disposition: attachment; filename="color-cube.3mf"
+
+/files/3mf/color-cubes-plate-25.3mf
+  Content-Disposition: attachment; filename="color-cubes-plate-25.3mf"
+
+/files/3mf/color-cubes-plate-49.3mf
+  Content-Disposition: attachment; filename="color-cubes-plate-49.3mf"
+
+/files/3mf/lid-7x7.3mf
+  Content-Disposition: attachment; filename="lid-7x7.3mf"
+
+/files/3mf/tray-7x7.3mf
+  Content-Disposition: attachment; filename="tray-7x7.3mf"
+
+/files/obj/color-cube.mtl
+  Content-Disposition: attachment; filename="color-cube.mtl"
+
+/files/obj/color-cube.obj
+  Content-Disposition: attachment; filename="color-cube.obj"
+
+/files/obj/lid-7x7.mtl
+  Content-Disposition: attachment; filename="lid-7x7.mtl"
+
+/files/obj/lid-7x7.obj
+  Content-Disposition: attachment; filename="lid-7x7.obj"
+
+/files/obj/tray-7x7.mtl
+  Content-Disposition: attachment; filename="tray-7x7.mtl"
+
+/files/obj/tray-7x7.obj
+  Content-Disposition: attachment; filename="tray-7x7.obj"
+
+/files/plates/cubes-10x10.3mf
+  Content-Disposition: attachment; filename="cubes-10x10.3mf"
+
+/files/plates/cubes-2x2.3mf
+  Content-Disposition: attachment; filename="cubes-2x2.3mf"
+
+/files/plates/cubes-3x3.3mf
+  Content-Disposition: attachment; filename="cubes-3x3.3mf"
+
+/files/plates/cubes-4x4.3mf
+  Content-Disposition: attachment; filename="cubes-4x4.3mf"
+
+/files/plates/cubes-5x5.3mf
+  Content-Disposition: attachment; filename="cubes-5x5.3mf"
+
+/files/plates/cubes-6x6.3mf
+  Content-Disposition: attachment; filename="cubes-6x6.3mf"
+
+/files/plates/cubes-7x7.3mf
+  Content-Disposition: attachment; filename="cubes-7x7.3mf"
+
+/files/plates/cubes-8x8.3mf
+  Content-Disposition: attachment; filename="cubes-8x8.3mf"
+
+/files/plates/cubes-9x9.3mf
+  Content-Disposition: attachment; filename="cubes-9x9.3mf"
+
+/files/projects/bambu-studio-orcaslicer/color-cubes-7x7-set.3mf
+  Content-Disposition: attachment; filename="color-cubes-7x7-set.3mf"
+
+/files/source/color-cube.f3d
+  Content-Disposition: attachment; filename="color-cube.f3d"
+
+/files/source/color-cubes-case-7x7.f3d
+  Content-Disposition: attachment; filename="color-cubes-case-7x7.f3d"
+
+/files/stl/color-cube/cube-blue.stl
+  Content-Disposition: attachment; filename="cube-blue.stl"
+
+/files/stl/color-cube/cube-red.stl
+  Content-Disposition: attachment; filename="cube-red.stl"
+
+/files/stl/color-cube/cube-split-by-blue.stl
+  Content-Disposition: attachment; filename="cube-split-by-blue.stl"
+
+/files/stl/color-cube/cube-split-by-yellow.stl
+  Content-Disposition: attachment; filename="cube-split-by-yellow.stl"
+
+/files/stl/color-cube/cube-split-rw-red.stl
+  Content-Disposition: attachment; filename="cube-split-rw-red.stl"
+
+/files/stl/color-cube/cube-split-rw-white.stl
+  Content-Disposition: attachment; filename="cube-split-rw-white.stl"
+
+/files/stl/color-cube/cube-white.stl
+  Content-Disposition: attachment; filename="cube-white.stl"
+
+/files/stl/color-cube/cube-yellow.stl
+  Content-Disposition: attachment; filename="cube-yellow.stl"
+
+/files/stl/lid-7x7/lid-art-blue.stl
+  Content-Disposition: attachment; filename="lid-art-blue.stl"
+
+/files/stl/lid-7x7/lid-art-red.stl
+  Content-Disposition: attachment; filename="lid-art-red.stl"
+
+/files/stl/lid-7x7/lid-art-white.stl
+  Content-Disposition: attachment; filename="lid-art-white.stl"
+
+/files/stl/lid-7x7/lid-art-yellow.stl
+  Content-Disposition: attachment; filename="lid-art-yellow.stl"
+
+/files/stl/lid-7x7/lid-top-white.stl
+  Content-Disposition: attachment; filename="lid-top-white.stl"
+
+/files/stl/lid-7x7/lid-walls-red.stl
+  Content-Disposition: attachment; filename="lid-walls-red.stl"
+
+/files/stl/tray-7x7/tray.stl
+  Content-Disposition: attachment; filename="tray.stl"
+
+/files/trays/tray-10x10.3mf
+  Content-Disposition: attachment; filename="tray-10x10.3mf"
+
+/files/trays/tray-10x10.stl
+  Content-Disposition: attachment; filename="tray-10x10.stl"
+
+/files/trays/tray-2x2.3mf
+  Content-Disposition: attachment; filename="tray-2x2.3mf"
+
+/files/trays/tray-2x2.stl
+  Content-Disposition: attachment; filename="tray-2x2.stl"
+
+/files/trays/tray-3x3.3mf
+  Content-Disposition: attachment; filename="tray-3x3.3mf"
+
+/files/trays/tray-3x3.stl
+  Content-Disposition: attachment; filename="tray-3x3.stl"
+
+/files/trays/tray-4x4.3mf
+  Content-Disposition: attachment; filename="tray-4x4.3mf"
+
+/files/trays/tray-4x4.stl
+  Content-Disposition: attachment; filename="tray-4x4.stl"
+
+/files/trays/tray-5x5.3mf
+  Content-Disposition: attachment; filename="tray-5x5.3mf"
+
+/files/trays/tray-5x5.stl
+  Content-Disposition: attachment; filename="tray-5x5.stl"
+
+/files/trays/tray-6x6.3mf
+  Content-Disposition: attachment; filename="tray-6x6.3mf"
+
+/files/trays/tray-6x6.stl
+  Content-Disposition: attachment; filename="tray-6x6.stl"
+
+/files/trays/tray-7x7.3mf
+  Content-Disposition: attachment; filename="tray-7x7.3mf"
+
+/files/trays/tray-7x7.stl
+  Content-Disposition: attachment; filename="tray-7x7.stl"
+
+/files/trays/tray-8x8.3mf
+  Content-Disposition: attachment; filename="tray-8x8.3mf"
+
+/files/trays/tray-8x8.stl
+  Content-Disposition: attachment; filename="tray-8x8.stl"
+
+/files/trays/tray-9x9.3mf
+  Content-Disposition: attachment; filename="tray-9x9.3mf"
+
+/files/trays/tray-9x9.stl
+  Content-Disposition: attachment; filename="tray-9x9.stl"
+
+# --- end of print files ---

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="2600" height="1400" viewBox="0 0 2600 1400">
+<title>Color Cubes: loose-wide-24-cubes</title>
+<defs>
+<g id="f0"><rect x="-50" y="-50" width="100" height="100" rx="5" fill="#F4ECD8"/><rect x="-49.25" y="-49.25" width="98.5" height="98.5" rx="4.5" fill="none" stroke="#D9CDB0" stroke-width="1.5" opacity="0.55"/></g>
+<g id="f1"><rect x="-50" y="-50" width="100" height="100" rx="5" fill="#C0272D"/><rect x="-49.25" y="-49.25" width="98.5" height="98.5" rx="4.5" fill="none" stroke="#8F1C21" stroke-width="1.5" opacity="0.55"/></g>
+<g id="f2"><rect x="-50" y="-50" width="100" height="100" rx="5" fill="#E3B23C"/><rect x="-49.25" y="-49.25" width="98.5" height="98.5" rx="4.5" fill="none" stroke="#B98C24" stroke-width="1.5" opacity="0.55"/></g>
+<g id="f3"><rect x="-50" y="-50" width="100" height="100" rx="5" fill="#1E2A5A"/><rect x="-49.25" y="-49.25" width="98.5" height="98.5" rx="4.5" fill="none" stroke="#121A3A" stroke-width="1.5" opacity="0.55"/></g>
+<g id="f4"><rect x="-50" y="-50" width="100" height="100" rx="5" fill="#1E2A5A"/><polygon points="43.82,-43.82 43.82,43.82 -43.82,43.82" fill="#E3B23C"/><rect x="-49.25" y="-49.25" width="98.5" height="98.5" rx="4.5" fill="none" stroke="#121A3A" stroke-width="1.5" opacity="0.55"/></g>
+<g id="f5"><rect x="-50" y="-50" width="100" height="100" rx="5" fill="#1E2A5A"/><polygon points="43.82,43.82 -43.82,43.82 -43.82,-43.82" fill="#E3B23C"/><rect x="-49.25" y="-49.25" width="98.5" height="98.5" rx="4.5" fill="none" stroke="#121A3A" stroke-width="1.5" opacity="0.55"/></g>
+<g id="f6"><rect x="-50" y="-50" width="100" height="100" rx="5" fill="#1E2A5A"/><polygon points="-43.82,43.82 -43.82,-43.82 43.82,-43.82" fill="#E3B23C"/><rect x="-49.25" y="-49.25" width="98.5" height="98.5" rx="4.5" fill="none" stroke="#121A3A" stroke-width="1.5" opacity="0.55"/></g>
+<g id="f7"><rect x="-50" y="-50" width="100" height="100" rx="5" fill="#1E2A5A"/><polygon points="-43.82,-43.82 43.82,-43.82 43.82,43.82" fill="#E3B23C"/><rect x="-49.25" y="-49.25" width="98.5" height="98.5" rx="4.5" fill="none" stroke="#121A3A" stroke-width="1.5" opacity="0.55"/></g>
+<g id="f8"><rect x="-50" y="-50" width="100" height="100" rx="5" fill="#C0272D"/><polygon points="43.82,-43.82 43.82,43.82 -43.82,43.82" fill="#F4ECD8"/><rect x="-49.25" y="-49.25" width="98.5" height="98.5" rx="4.5" fill="none" stroke="#8F1C21" stroke-width="1.5" opacity="0.55"/></g>
+<g id="f9"><rect x="-50" y="-50" width="100" height="100" rx="5" fill="#C0272D"/><polygon points="43.82,43.82 -43.82,43.82 -43.82,-43.82" fill="#F4ECD8"/><rect x="-49.25" y="-49.25" width="98.5" height="98.5" rx="4.5" fill="none" stroke="#8F1C21" stroke-width="1.5" opacity="0.55"/></g>
+<g id="f10"><rect x="-50" y="-50" width="100" height="100" rx="5" fill="#C0272D"/><polygon points="-43.82,43.82 -43.82,-43.82 43.82,-43.82" fill="#F4ECD8"/><rect x="-49.25" y="-49.25" width="98.5" height="98.5" rx="4.5" fill="none" stroke="#8F1C21" stroke-width="1.5" opacity="0.55"/></g>
+<g id="f11"><rect x="-50" y="-50" width="100" height="100" rx="5" fill="#C0272D"/><polygon points="-43.82,-43.82 43.82,-43.82 43.82,43.82" fill="#F4ECD8"/><rect x="-49.25" y="-49.25" width="98.5" height="98.5" rx="4.5" fill="none" stroke="#8F1C21" stroke-width="1.5" opacity="0.55"/></g>
+<filter id="sh" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur in="SourceAlpha" stdDeviation="7.0"/><feOffset dx="5.0" dy="8.0" result="b"/><feComponentTransfer><feFuncA type="linear" slope="0.38"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<g filter="url(#sh)">
+<use href="#f1" transform="translate(1241.5 873.2) rotate(239.91) scale(1.5000)"/>
+<use href="#f11" transform="translate(1027.8 1246.3) rotate(173.71) scale(1.5000)"/>
+<use href="#f9" transform="translate(1738.4 811.6) rotate(200.95) scale(1.5000)"/>
+<use href="#f1" transform="translate(2399.5 554.4) rotate(122.28) scale(1.5000)"/>
+<use href="#f10" transform="translate(285.3 1050.7) rotate(26.86) scale(1.5000)"/>
+<use href="#f0" transform="translate(1717.3 1027.7) rotate(31.45) scale(1.5000)"/>
+<use href="#f3" transform="translate(2035.2 878.2) rotate(80.37) scale(1.5000)"/>
+<use href="#f1" transform="translate(2327.4 273.8) rotate(152.35) scale(1.5000)"/>
+<use href="#f8" transform="translate(1390.8 1120.2) rotate(200.94) scale(1.5000)"/>
+<use href="#f7" transform="translate(1426.8 708.0) rotate(30.10) scale(1.5000)"/>
+<use href="#f2" transform="translate(591.3 1016.0) rotate(94.16) scale(1.5000)"/>
+<use href="#f2" transform="translate(2142.1 574.2) rotate(111.56) scale(1.5000)"/>
+<use href="#f5" transform="translate(690.4 549.7) rotate(184.09) scale(1.5000)"/>
+<use href="#f3" transform="translate(1343.7 394.4) rotate(153.81) scale(1.5000)"/>
+<use href="#f1" transform="translate(620.1 818.0) rotate(271.19) scale(1.5000)"/>
+<use href="#f2" transform="translate(269.7 655.2) rotate(75.17) scale(1.5000)"/>
+<use href="#f6" transform="translate(701.8 1237.4) rotate(167.30) scale(1.5000)"/>
+<use href="#f4" transform="translate(1993.2 347.5) rotate(286.18) scale(1.5000)"/>
+<use href="#f5" transform="translate(719.4 277.7) rotate(129.94) scale(1.5000)"/>
+<use href="#f3" transform="translate(1746.4 294.9) rotate(319.12) scale(1.5000)"/>
+<use href="#f0" transform="translate(468.3 370.3) rotate(169.84) scale(1.5000)"/>
+<use href="#f4" transform="translate(2362.6 986.5) rotate(150.36) scale(1.5000)"/>
+<use href="#f5" transform="translate(949.2 555.3) rotate(264.90) scale(1.5000)"/>
+<use href="#f5" transform="translate(1984.8 1137.2) rotate(327.78) scale(1.5000)"/>
+</g>
+</svg>

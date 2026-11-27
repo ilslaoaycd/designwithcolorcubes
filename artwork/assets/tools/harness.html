@@ -1,0 +1,66 @@
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+</head><body style="margin:0;background:transparent">
+<canvas id="c"></canvas>
+<script type="module">
+import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+const canvas=document.getElementById("c");
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,preserveDrawingBuffer:true});
+renderer.setPixelRatio(1); renderer.outputColorSpace=THREE.SRGBColorSpace;
+renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+const pmrem=new THREE.PMREMGenerator(renderer);
+const envTex=pmrem.fromScene(new RoomEnvironment(),0.04).texture;
+const loader=new GLTFLoader();
+const load=(u)=>new Promise((res,rej)=>loader.load(u,g=>res(g.scene),undefined,rej));
+const models={scan:[],printed:[],flat:null};
+const S=0.0275;
+async function init(){
+  for(let i=0;i<10;i++) models.scan.push(await load(`scan-${i}.glb`));
+  for(let i=0;i<10;i++) models.printed.push(await load(`printed-${i}.glb`));
+  models.flat=await load("flat.glb");
+  window.ready=true;
+}
+const ax=new THREE.Vector3(1,0,0), ay=new THREE.Vector3(0,1,0), az=new THREE.Vector3(0,0,1);
+const q=(axis,deg)=>new THREE.Quaternion().setFromAxisAngle(axis,deg*Math.PI/180);
+function faceQuat(d,spin){
+  if(d===0) return q(ax,-90).multiply(q(az,90*spin));
+  if(d===1) return q(ax,90).multiply(q(az,90*spin));
+  if(d===2) return q(az,90).multiply(q(ax,90*spin));
+  if(d===3) return q(az,-90).multiply(q(ax,90*spin));
+  if(d>=8) return q(ay,-90*(d-8));
+  const k=d-4; return q(ay,-90*((((k-3)%4)+4)%4)).multiply(q(ax,180));
+}
+window.renderScene=function(spec){
+  const scene=new THREE.Scene(); scene.environment=envTex; const flat=spec.style==="flat"; scene.environmentIntensity=flat?0.32:0.45;
+  const W=spec.w,H=spec.h; renderer.setSize(W,H,false);
+  const cam=new THREE.PerspectiveCamera(spec.fov||30,W/H,0.005,20);
+  cam.position.set(...spec.cam); cam.lookAt(...(spec.target||[0,0,0]));
+  const box=new THREE.Box3();
+  spec.cubes.forEach((c,i)=>{
+    const src=spec.style==="flat"?models.flat:spec.style==="printed"?models.printed[c.v%10]:models.scan[c.v%10];
+    const m=src.clone(true);
+    m.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});
+    const qq=q(ay,-(c.yaw||0)).multiply(faceQuat(c.d,c.spin||0));
+    if(c.tilt) qq.premultiply(q(new THREE.Vector3(...c.tiltAxis),c.tilt));
+    m.quaternion.copy(qq); m.position.set(c.x,c.y??S/2,c.z);
+    scene.add(m); box.expandByObject(m);
+  });
+  const ctr=box.getCenter(new THREE.Vector3()), size=box.getSize(new THREE.Vector3());
+  const R=Math.max(size.x,size.z)*0.75+0.05;
+  const key=new THREE.DirectionalLight(0xffffff,flat?0.85:1.15);
+  key.position.copy(ctr).add(new THREE.Vector3(-0.6,1.2,0.45).normalize().multiplyScalar(R*2.2));
+  key.target.position.copy(ctr); scene.add(key.target);
+  key.castShadow=true; key.shadow.mapSize.set(4096,4096);
+  Object.assign(key.shadow.camera,{left:-R,right:R,top:R,bottom:-R,near:0.01,far:R*5}); key.shadow.bias=-0.0002; key.shadow.normalBias=0.0004; key.shadow.radius=4;
+  scene.add(key);
+  const fill=new THREE.DirectionalLight(0xffffff,0.35); fill.position.set(0.5,0.4,0.8); scene.add(fill);
+  scene.add(new THREE.HemisphereLight(0xffffff,0xbbbbbb,flat?0.38:0.5));
+  const g=new THREE.Mesh(new THREE.PlaneGeometry(R*6,R*6),new THREE.ShadowMaterial({opacity:spec.shadow??0.3}));
+  g.rotation.x=-Math.PI/2; g.position.set(ctr.x,0,ctr.z); g.receiveShadow=true; scene.add(g);
+  renderer.render(scene,cam);
+  return canvas.toDataURL("image/png");
+};
+init();
+</script></body></html>

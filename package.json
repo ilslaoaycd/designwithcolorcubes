@@ -1,0 +1,19 @@
+{
+  "name": "design-with-color-cubes",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Free, open-source Color Cubes: 3D-printable set, tray designer and colorcubes.org short links.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "test": "node --import ./test/wasm-loader.mjs --test",
+    "dev:site": "npx wrangler dev -c workers/site/wrangler.jsonc",
+    "dev:redirects": "npx wrangler dev -c workers/redirects/wrangler.jsonc",
+    "deploy:site": "npx wrangler deploy -c workers/site/wrangler.jsonc",
+    "deploy:redirects": "npx wrangler deploy -c workers/redirects/wrangler.jsonc",
+    "build:og": "sh tools/build_og_wasm.sh"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

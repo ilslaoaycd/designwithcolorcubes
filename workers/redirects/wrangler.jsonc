@@ -1,0 +1,17 @@
+// Redirect Worker: colorcubes.org short links, plus designwithcolorcubes.com and the www
+// hostnames, which all 301 to https://designwithcolorcubes.org. Deploy: npm run deploy:redirects
+{
+  "name": "colorcubes-redirects",
+  "account_id": "c343fe40d7c3c808f314aaec931c5204", // Cloudflare account "Personal Projects"
+  "main": "src/index.js",
+  "compatibility_date": "2026-11-01",
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [
+    { "pattern": "colorcubes.org", "custom_domain": true },
+    { "pattern": "www.colorcubes.org", "custom_domain": true },
+    { "pattern": "designwithcolorcubes.com", "custom_domain": true },
+    { "pattern": "www.designwithcolorcubes.com", "custom_domain": true },
+    { "pattern": "www.designwithcolorcubes.org", "custom_domain": true }
+  ]
+}

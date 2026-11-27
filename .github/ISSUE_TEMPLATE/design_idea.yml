@@ -1,0 +1,40 @@
+name: Design idea
+description: A pattern you made in the designer, or an idea for the presets or the lid.
+title: "[Design] "
+labels: ["design"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Make the design in the [designer](https://designwithcolorcubes.org/designer/) and press Share to get its link.
+        Designs that only turn around their center, like pinwheels, can read as a swastika, so they don't go into the presets. Mirrored and repeated designs are best.
+  - type: input
+    id: link
+    attributes:
+      label: Link to the design
+      description: The link from Share, or the tray code.
+      placeholder: https://designwithcolorcubes.org/designer/w78w-7rr8-6rr5-w65w
+    validations:
+      required: true
+  - type: input
+    id: name
+    attributes:
+      label: A name for it
+      placeholder: Little diamond
+  - type: textarea
+    id: about
+    attributes:
+      label: About it
+      description: Where it comes from (your own, an old pattern sheet, a quilt block), and anything else worth knowing.
+  - type: input
+    id: credit
+    attributes:
+      label: How to credit you
+      description: Your name or handle, as you'd like it to appear. Leave blank to stay anonymous.
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Permission
+      options:
+        - label: This is my own design, or an old public-domain one, and the project may use it under its licenses (MIT for code, CC BY 4.0 for the pattern sheets).
+          required: true

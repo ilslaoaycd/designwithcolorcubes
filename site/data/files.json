@@ -1,0 +1,454 @@
+{
+ "cube": 26.95,
+ "gap": 3,
+ "files": [
+  {
+   "path": "/files/3mf/color-cube.3mf",
+   "bytes": 2483,
+   "kind": "cube",
+   "format": "3mf",
+   "label": "One cube"
+  },
+  {
+   "path": "/files/3mf/color-cubes-plate-25.3mf",
+   "bytes": 3176,
+   "kind": "plate-original",
+   "format": "3mf",
+   "label": "Plate of 25 cubes"
+  },
+  {
+   "path": "/files/3mf/color-cubes-plate-49.3mf",
+   "bytes": 3845,
+   "kind": "plate-original",
+   "format": "3mf",
+   "label": "Plate of 49 cubes"
+  },
+  {
+   "path": "/files/3mf/lid-7x7.3mf",
+   "bytes": 555170,
+   "kind": "lid",
+   "format": "3mf",
+   "label": "Lid, 7×7, the 1930s artwork",
+   "n": 7
+  },
+  {
+   "path": "/files/3mf/tray-7x7.3mf",
+   "bytes": 2043,
+   "kind": "tray",
+   "format": "3mf",
+   "label": "Tray, 7×7",
+   "n": 7
+  },
+  {
+   "path": "/files/LICENSE.txt",
+   "bytes": 534,
+   "kind": "doc",
+   "format": "txt",
+   "label": "LICENSE"
+  },
+  {
+   "path": "/files/README.txt",
+   "bytes": 4070,
+   "kind": "doc",
+   "format": "txt",
+   "label": "README"
+  },
+  {
+   "path": "/files/obj/color-cube.mtl",
+   "bytes": 221,
+   "kind": "obj",
+   "format": "obj",
+   "label": "color-cube.mtl"
+  },
+  {
+   "path": "/files/obj/color-cube.obj",
+   "bytes": 2562,
+   "kind": "obj",
+   "format": "obj",
+   "label": "color-cube.obj"
+  },
+  {
+   "path": "/files/obj/lid-7x7.mtl",
+   "bytes": 231,
+   "kind": "obj",
+   "format": "obj",
+   "label": "lid-7x7.mtl",
+   "n": 7
+  },
+  {
+   "path": "/files/obj/lid-7x7.obj",
+   "bytes": 1407812,
+   "kind": "obj",
+   "format": "obj",
+   "label": "lid-7x7.obj",
+   "n": 7
+  },
+  {
+   "path": "/files/obj/tray-7x7.mtl",
+   "bytes": 120,
+   "kind": "obj",
+   "format": "obj",
+   "label": "tray-7x7.mtl",
+   "n": 7
+  },
+  {
+   "path": "/files/obj/tray-7x7.obj",
+   "bytes": 1339,
+   "kind": "obj",
+   "format": "obj",
+   "label": "tray-7x7.obj",
+   "n": 7
+  },
+  {
+   "path": "/files/plates/cubes-10x10.3mf",
+   "bytes": 4998,
+   "kind": "plate",
+   "format": "3mf",
+   "label": "Plate of 10×10 cubes",
+   "n": 10
+  },
+  {
+   "path": "/files/plates/cubes-2x2.3mf",
+   "bytes": 2597,
+   "kind": "plate",
+   "format": "3mf",
+   "label": "Plate of 2×2 cubes",
+   "n": 2
+  },
+  {
+   "path": "/files/plates/cubes-3x3.3mf",
+   "bytes": 2749,
+   "kind": "plate",
+   "format": "3mf",
+   "label": "Plate of 3×3 cubes",
+   "n": 3
+  },
+  {
+   "path": "/files/plates/cubes-4x4.3mf",
+   "bytes": 2954,
+   "kind": "plate",
+   "format": "3mf",
+   "label": "Plate of 4×4 cubes",
+   "n": 4
+  },
+  {
+   "path": "/files/plates/cubes-5x5.3mf",
+   "bytes": 3176,
+   "kind": "plate",
+   "format": "3mf",
+   "label": "Plate of 5×5 cubes",
+   "n": 5
+  },
+  {
+   "path": "/files/plates/cubes-6x6.3mf",
+   "bytes": 3488,
+   "kind": "plate",
+   "format": "3mf",
+   "label": "Plate of 6×6 cubes",
+   "n": 6
+  },
+  {
+   "path": "/files/plates/cubes-7x7.3mf",
+   "bytes": 3845,
+   "kind": "plate",
+   "format": "3mf",
+   "label": "Plate of 7×7 cubes",
+   "n": 7
+  },
+  {
+   "path": "/files/plates/cubes-8x8.3mf",
+   "bytes": 4204,
+   "kind": "plate",
+   "format": "3mf",
+   "label": "Plate of 8×8 cubes",
+   "n": 8
+  },
+  {
+   "path": "/files/plates/cubes-9x9.3mf",
+   "bytes": 4674,
+   "kind": "plate",
+   "format": "3mf",
+   "label": "Plate of 9×9 cubes",
+   "n": 9
+  },
+  {
+   "path": "/files/projects/bambu-studio-orcaslicer/color-cubes-7x7-set.3mf",
+   "bytes": 747687,
+   "kind": "project",
+   "format": "3mf",
+   "label": "Bambu Studio 2.4+ / OrcaSlicer 2.5+ project",
+   "n": 7
+  },
+  {
+   "path": "/files/source/color-cube.f3d",
+   "bytes": 104937,
+   "kind": "source",
+   "format": "f3d",
+   "label": "color-cube"
+  },
+  {
+   "path": "/files/source/color-cubes-case-7x7.f3d",
+   "bytes": 11519180,
+   "kind": "source",
+   "format": "f3d",
+   "label": "color-cubes-case-7x7",
+   "n": 7
+  },
+  {
+   "path": "/files/stl/color-cube/cube-blue.stl",
+   "bytes": 384,
+   "kind": "cube",
+   "format": "stl",
+   "label": "cube-blue"
+  },
+  {
+   "path": "/files/stl/color-cube/cube-red.stl",
+   "bytes": 384,
+   "kind": "cube",
+   "format": "stl",
+   "label": "cube-red"
+  },
+  {
+   "path": "/files/stl/color-cube/cube-split-by-blue.stl",
+   "bytes": 1284,
+   "kind": "cube",
+   "format": "stl",
+   "label": "cube-split-by-blue"
+  },
+  {
+   "path": "/files/stl/color-cube/cube-split-by-yellow.stl",
+   "bytes": 784,
+   "kind": "cube",
+   "format": "stl",
+   "label": "cube-split-by-yellow"
+  },
+  {
+   "path": "/files/stl/color-cube/cube-split-rw-red.stl",
+   "bytes": 1284,
+   "kind": "cube",
+   "format": "stl",
+   "label": "cube-split-rw-red"
+  },
+  {
+   "path": "/files/stl/color-cube/cube-split-rw-white.stl",
+   "bytes": 784,
+   "kind": "cube",
+   "format": "stl",
+   "label": "cube-split-rw-white"
+  },
+  {
+   "path": "/files/stl/color-cube/cube-white.stl",
+   "bytes": 384,
+   "kind": "cube",
+   "format": "stl",
+   "label": "cube-white"
+  },
+  {
+   "path": "/files/stl/color-cube/cube-yellow.stl",
+   "bytes": 384,
+   "kind": "cube",
+   "format": "stl",
+   "label": "cube-yellow"
+  },
+  {
+   "path": "/files/stl/lid-7x7/lid-art-blue.stl",
+   "bytes": 748384,
+   "kind": "lid",
+   "format": "stl",
+   "label": "lid-art-blue",
+   "n": 7
+  },
+  {
+   "path": "/files/stl/lid-7x7/lid-art-red.stl",
+   "bytes": 155684,
+   "kind": "lid",
+   "format": "stl",
+   "label": "lid-art-red",
+   "n": 7
+  },
+  {
+   "path": "/files/stl/lid-7x7/lid-art-white.stl",
+   "bytes": 1200984,
+   "kind": "lid",
+   "format": "stl",
+   "label": "lid-art-white",
+   "n": 7
+  },
+  {
+   "path": "/files/stl/lid-7x7/lid-art-yellow.stl",
+   "bytes": 88584,
+   "kind": "lid",
+   "format": "stl",
+   "label": "lid-art-yellow",
+   "n": 7
+  },
+  {
+   "path": "/files/stl/lid-7x7/lid-top-white.stl",
+   "bytes": 35884,
+   "kind": "lid",
+   "format": "stl",
+   "label": "lid-top-white",
+   "n": 7
+  },
+  {
+   "path": "/files/stl/lid-7x7/lid-walls-red.stl",
+   "bytes": 7284,
+   "kind": "lid",
+   "format": "stl",
+   "label": "lid-walls-red",
+   "n": 7
+  },
+  {
+   "path": "/files/stl/tray-7x7/tray.stl",
+   "bytes": 3484,
+   "kind": "tray",
+   "format": "stl",
+   "label": "Tray, 7×7",
+   "n": 7
+  },
+  {
+   "path": "/files/trays/tray-10x10.3mf",
+   "bytes": 2113,
+   "kind": "tray-n",
+   "format": "3mf",
+   "label": "Tray, 10×10",
+   "n": 10
+  },
+  {
+   "path": "/files/trays/tray-10x10.stl",
+   "bytes": 3484,
+   "kind": "tray-n",
+   "format": "stl",
+   "label": "Tray, 10×10",
+   "n": 10
+  },
+  {
+   "path": "/files/trays/tray-2x2.3mf",
+   "bytes": 2115,
+   "kind": "tray-n",
+   "format": "3mf",
+   "label": "Tray, 2×2",
+   "n": 2
+  },
+  {
+   "path": "/files/trays/tray-2x2.stl",
+   "bytes": 3484,
+   "kind": "tray-n",
+   "format": "stl",
+   "label": "Tray, 2×2",
+   "n": 2
+  },
+  {
+   "path": "/files/trays/tray-3x3.3mf",
+   "bytes": 2108,
+   "kind": "tray-n",
+   "format": "3mf",
+   "label": "Tray, 3×3",
+   "n": 3
+  },
+  {
+   "path": "/files/trays/tray-3x3.stl",
+   "bytes": 3484,
+   "kind": "tray-n",
+   "format": "stl",
+   "label": "Tray, 3×3",
+   "n": 3
+  },
+  {
+   "path": "/files/trays/tray-4x4.3mf",
+   "bytes": 2112,
+   "kind": "tray-n",
+   "format": "3mf",
+   "label": "Tray, 4×4",
+   "n": 4
+  },
+  {
+   "path": "/files/trays/tray-4x4.stl",
+   "bytes": 3484,
+   "kind": "tray-n",
+   "format": "stl",
+   "label": "Tray, 4×4",
+   "n": 4
+  },
+  {
+   "path": "/files/trays/tray-5x5.3mf",
+   "bytes": 2114,
+   "kind": "tray-n",
+   "format": "3mf",
+   "label": "Tray, 5×5",
+   "n": 5
+  },
+  {
+   "path": "/files/trays/tray-5x5.stl",
+   "bytes": 3484,
+   "kind": "tray-n",
+   "format": "stl",
+   "label": "Tray, 5×5",
+   "n": 5
+  },
+  {
+   "path": "/files/trays/tray-6x6.3mf",
+   "bytes": 2115,
+   "kind": "tray-n",
+   "format": "3mf",
+   "label": "Tray, 6×6",
+   "n": 6
+  },
+  {
+   "path": "/files/trays/tray-6x6.stl",
+   "bytes": 3484,
+   "kind": "tray-n",
+   "format": "stl",
+   "label": "Tray, 6×6",
+   "n": 6
+  },
+  {
+   "path": "/files/trays/tray-7x7.3mf",
+   "bytes": 2105,
+   "kind": "tray-n",
+   "format": "3mf",
+   "label": "Tray, 7×7",
+   "n": 7
+  },
+  {
+   "path": "/files/trays/tray-7x7.stl",
+   "bytes": 3484,
+   "kind": "tray-n",
+   "format": "stl",
+   "label": "Tray, 7×7",
+   "n": 7
+  },
+  {
+   "path": "/files/trays/tray-8x8.3mf",
+   "bytes": 2105,
+   "kind": "tray-n",
+   "format": "3mf",
+   "label": "Tray, 8×8",
+   "n": 8
+  },
+  {
+   "path": "/files/trays/tray-8x8.stl",
+   "bytes": 3484,
+   "kind": "tray-n",
+   "format": "stl",
+   "label": "Tray, 8×8",
+   "n": 8
+  },
+  {
+   "path": "/files/trays/tray-9x9.3mf",
+   "bytes": 2106,
+   "kind": "tray-n",
+   "format": "3mf",
+   "label": "Tray, 9×9",
+   "n": 9
+  },
+  {
+   "path": "/files/trays/tray-9x9.stl",
+   "bytes": 3484,
+   "kind": "tray-n",
+   "format": "stl",
+   "label": "Tray, 9×9",
+   "n": 9
+  }
+ ]
+}

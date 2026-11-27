@@ -1,0 +1,36 @@
+/* The History page: one long article of plain prose, a timeline table and the sources. site.css does
+   the rest. */
+
+.history article { padding-top: clamp(24px, 4vw, 48px); padding-bottom: clamp(16px, 3vw, 32px); }
+.history article > * { max-width: 46rem; }
+.history article > section { scroll-margin-top: 16px; }
+.history h2 {
+  font-size: clamp(1.7rem, 3.4vw, 2.4rem);
+  line-height: 1.08;
+  margin: clamp(40px, 6vw, 64px) 0 0.5em;
+}
+.history section:first-of-type h2 { margin-top: clamp(24px, 4vw, 40px); }
+
+.byline { color: var(--ink-soft); font-size: 1rem; }
+
+/* Footnote marks: small numbers that link to the source. */
+.history sup { font-size: 0.68em; line-height: 0; font-weight: 600; color: var(--ink-soft); }
+.history sup a { text-decoration: none; padding: 0 0.1em; }
+.history sup a:hover, .history sup a:focus-visible { text-decoration: underline; }
+
+/* The open question: a plain paragraph with a rule beside it, as on the Contribute page. */
+.question { padding-left: 16px; border-left: 4px solid var(--yellow); }
+
+.timeline { width: 100%; border-collapse: collapse; font-size: 1rem; margin: 8px 0 0; }
+.timeline th, .timeline td { text-align: left; vertical-align: top; padding: 11px 12px 11px 0; border-top: 1px solid var(--line); }
+.timeline thead th { border-top: 0; font-size: 0.9rem; color: var(--ink-soft); font-weight: 600; padding-bottom: 6px; }
+.timeline tbody th { font-weight: 650; white-space: nowrap; width: 7.5rem; font-variant-numeric: tabular-nums; }
+.timeline td { padding-right: 0; }
+@media (max-width: 480px) { .timeline tbody th { width: 5.5rem; white-space: normal; } }
+
+.sources { padding-left: 2em; font-size: 0.95rem; color: var(--ink-soft); }
+.sources li { margin-bottom: 0.7em; padding-left: 0.2em; overflow-wrap: anywhere; scroll-margin-top: 16px; }
+.sources li:target { color: var(--ink); background: rgb(227 178 60 / 0.18); border-radius: 6px; }
+.sources a { color: inherit; }
+
+.see-also { margin-top: clamp(40px, 6vw, 64px); padding-top: 18px; border-top: 2px solid var(--line); }

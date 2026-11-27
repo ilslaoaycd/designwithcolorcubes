@@ -1,0 +1,48 @@
+name: Something's wrong
+description: A file that won't slice or doesn't fit, a page that looks or works wrong, a broken link.
+title: "[Problem] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for telling us. A clear description and a screenshot or photo usually make it quick to fix.
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where is it?
+      options:
+        - A print file (cube, tray, lid, plate)
+        - The box designer
+        - The pattern designer
+        - The patterns page
+        - The home page or another page
+        - A link (colorcubes.org or a shared design)
+        - Something else
+    validations:
+      required: true
+  - type: input
+    id: link
+    attributes:
+      label: Link or file name
+      description: The page address, the shared design link, or the name of the file.
+      placeholder: https://designwithcolorcubes.org/box/… or tray-7x7.3mf
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what happened, and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: setup
+    attributes:
+      label: Your setup
+      description: |
+        For a print: printer, slicer and version, filament, and any settings you changed.
+        For a page: browser and device (for example "Safari on an iPhone 13").
+  - type: textarea
+    id: pictures
+    attributes:
+      label: Screenshots or photos
+      description: Drag them in here. Photos from a phone can carry the place they were taken; you may want to strip that first.

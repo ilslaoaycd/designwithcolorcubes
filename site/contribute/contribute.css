@@ -1,0 +1,48 @@
+/* The Contribute page. Plain headings, paragraphs and lists; site.css does the rest. */
+
+.contribute code {
+  font: inherit;
+  font-size: 0.92em;
+  font-weight: 500;
+  padding: 0.05em 0.35em;
+  border-radius: 6px;
+  background: rgb(30 42 90 / 0.07);
+  overflow-wrap: break-word;
+}
+.contribute code.cmd { white-space: nowrap; }
+.contribute .band.navy code { background: rgb(244 236 216 / 0.12); }
+
+/* Five ways to help, set as two columns of text. */
+.ways {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 clamp(32px, 5vw, 72px);
+  margin-top: 8px;
+}
+.ways h3 { margin-top: 1.4em; }
+@media (max-width: 760px) { .ways { grid-template-columns: minmax(0, 1fr); } }
+
+.steps, .checks, .plain { margin: 0 0 1em; padding-left: 1.4em; max-width: var(--measure); }
+.steps li, .plain li { margin-bottom: 0.55em; padding-left: 0.2em; }
+.checks li { margin-bottom: 0.8em; }
+.checks li::marker { color: var(--yellow); }
+.steps li::marker { font-weight: 700; color: var(--red); }
+
+/* Folders and what goes in them. */
+.where {
+  display: grid;
+  grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+  gap: 0 clamp(20px, 4vw, 40px);
+  margin: 28px 0 0;
+  max-width: 62rem;
+}
+.where dt, .where dd { padding-block: 16px; border-top: 1px solid var(--line); }
+.where dt { font-weight: 600; }
+.where dd { margin: 0; }
+@media (max-width: 620px) {
+  .where { grid-template-columns: minmax(0, 1fr); }
+  .where dd { border-top: 0; padding-top: 0; }
+}
+
+#models .art { margin-top: 12px; border-radius: var(--radius); }
+#models .checks { margin-top: 8px; }

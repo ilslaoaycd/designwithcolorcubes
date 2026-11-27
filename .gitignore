@@ -1,0 +1,22 @@
+node_modules/
+.wrangler/
+.dev.vars
+.DS_Store
+# Isaac's untouched working originals; release files are built into models/ and artwork/
+Replica Files/
+# Local notes and research that include other people's images; not for the public repository
+docs/HANDOFF.md
+reference/Color_Cubes_Reference.pdf
+tools/.kit-stage/
+__pycache__/
+# Agent instructions and settings stay on Isaac's machine, out of the public repository
+# (site/agents.md and site/llms.txt are the public guides and stay in)
+/CLAUDE.md
+/CLAUDE.local.md
+/.claude/
+/AGENTS.md
+/GEMINI.md
+/.cursor/
+/.cursorrules
+/.mcp.json
+.playwright-mcp/

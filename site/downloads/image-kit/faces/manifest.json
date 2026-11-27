@@ -1,0 +1,1922 @@
+[
+ {
+  "file": "faces/all/diag-blue-yellow-01.png",
+  "kind": "diag-blue-yellow",
+  "source_scan": "Scan_20261123-7",
+  "crop_quad_px": [
+   [
+    1265.5,
+    1884.9
+   ],
+   [
+    1454.1,
+    1819.7
+   ],
+   [
+    1518.7,
+    2006.4
+   ],
+   [
+    1330.1,
+    2071.6
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-blue-yellow-02.png",
+  "kind": "diag-blue-yellow",
+  "source_scan": "Scan_20261123-7",
+  "crop_quad_px": [
+   [
+    85.5,
+    1793.0
+   ],
+   [
+    255.0,
+    1687.4
+   ],
+   [
+    359.4,
+    1855.0
+   ],
+   [
+    189.9,
+    1960.6
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-blue-yellow-03.png",
+  "kind": "diag-blue-yellow",
+  "source_scan": "Scan_20261123-7",
+  "crop_quad_px": [
+   [
+    484.9,
+    1341.9
+   ],
+   [
+    678.1,
+    1288.9
+   ],
+   [
+    730.7,
+    1480.4
+   ],
+   [
+    537.5,
+    1533.4
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-blue-yellow-04.png",
+  "kind": "diag-blue-yellow",
+  "source_scan": "Scan_20261123-7",
+  "crop_quad_px": [
+   [
+    547.8,
+    712.9
+   ],
+   [
+    745.7,
+    679.3
+   ],
+   [
+    778.7,
+    874.1
+   ],
+   [
+    580.8,
+    907.7
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-blue-yellow-05.png",
+  "kind": "diag-blue-yellow",
+  "source_scan": "Scan_20261123-7",
+  "crop_quad_px": [
+   [
+    261.6,
+    556.6
+   ],
+   [
+    439.0,
+    652.1
+   ],
+   [
+    345.0,
+    826.8
+   ],
+   [
+    167.6,
+    731.2
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-blue-yellow-06.png",
+  "kind": "diag-blue-yellow",
+  "source_scan": "Scan_20261123-7",
+  "crop_quad_px": [
+   [
+    485.4,
+    323.7
+   ],
+   [
+    683.9,
+    334.2
+   ],
+   [
+    673.6,
+    530.4
+   ],
+   [
+    475.1,
+    520.0
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-blue-yellow-07.png",
+  "kind": "diag-blue-yellow",
+  "source_scan": "Scan_20261123-8",
+  "crop_quad_px": [
+   [
+    72.2,
+    1787.2
+   ],
+   [
+    256.2,
+    1707.4
+   ],
+   [
+    334.6,
+    1888.1
+   ],
+   [
+    150.7,
+    1968.0
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-blue-yellow-08.png",
+  "kind": "diag-blue-yellow",
+  "source_scan": "Scan_20261123-8",
+  "crop_quad_px": [
+   [
+    1301.4,
+    1699.7
+   ],
+   [
+    1467.5,
+    1808.1
+   ],
+   [
+    1359.1,
+    1974.2
+   ],
+   [
+    1193.0,
+    1865.8
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-blue-yellow-09.png",
+  "kind": "diag-blue-yellow",
+  "source_scan": "Scan_20261123-10",
+  "crop_quad_px": [
+   [
+    742.2,
+    840.6
+   ],
+   [
+    943.8,
+    832.5
+   ],
+   [
+    952.0,
+    1033.9
+   ],
+   [
+    750.4,
+    1042.1
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-blue-yellow-10.png",
+  "kind": "diag-blue-yellow",
+  "source_scan": "Scan_20261123-10",
+  "crop_quad_px": [
+   [
+    943.8,
+    832.5
+   ],
+   [
+    1145.4,
+    824.3
+   ],
+   [
+    1153.6,
+    1025.7
+   ],
+   [
+    952.0,
+    1033.9
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-blue-yellow-11.png",
+  "kind": "diag-blue-yellow",
+  "source_scan": "Scan_20261123-10",
+  "crop_quad_px": [
+   [
+    1145.4,
+    824.3
+   ],
+   [
+    1347.1,
+    816.1
+   ],
+   [
+    1355.3,
+    1017.5
+   ],
+   [
+    1153.6,
+    1025.7
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-blue-yellow-12.png",
+  "kind": "diag-blue-yellow",
+  "source_scan": "Scan_20261123-10",
+  "crop_quad_px": [
+   [
+    750.4,
+    1042.1
+   ],
+   [
+    952.0,
+    1033.9
+   ],
+   [
+    960.2,
+    1235.3
+   ],
+   [
+    758.6,
+    1243.5
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-blue-yellow-13.png",
+  "kind": "diag-blue-yellow",
+  "source_scan": "Scan_20261123-10",
+  "crop_quad_px": [
+   [
+    952.0,
+    1033.9
+   ],
+   [
+    1153.6,
+    1025.7
+   ],
+   [
+    1161.8,
+    1227.1
+   ],
+   [
+    960.2,
+    1235.3
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-blue-yellow-14.png",
+  "kind": "diag-blue-yellow",
+  "source_scan": "Scan_20261123-10",
+  "crop_quad_px": [
+   [
+    1153.6,
+    1025.7
+   ],
+   [
+    1355.3,
+    1017.5
+   ],
+   [
+    1363.4,
+    1218.9
+   ],
+   [
+    1161.8,
+    1227.1
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-blue-yellow-15.png",
+  "kind": "diag-blue-yellow",
+  "source_scan": "Scan_20261123-10",
+  "crop_quad_px": [
+   [
+    758.6,
+    1243.5
+   ],
+   [
+    960.2,
+    1235.3
+   ],
+   [
+    968.4,
+    1436.7
+   ],
+   [
+    766.7,
+    1444.9
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-blue-yellow-16.png",
+  "kind": "diag-blue-yellow",
+  "source_scan": "Scan_20261123-10",
+  "crop_quad_px": [
+   [
+    960.2,
+    1235.3
+   ],
+   [
+    1161.8,
+    1227.1
+   ],
+   [
+    1170.0,
+    1428.5
+   ],
+   [
+    968.4,
+    1436.7
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-blue-yellow-17.png",
+  "kind": "diag-blue-yellow",
+  "source_scan": "Scan_20261123-10",
+  "crop_quad_px": [
+   [
+    1161.8,
+    1227.1
+   ],
+   [
+    1363.4,
+    1218.9
+   ],
+   [
+    1371.6,
+    1420.3
+   ],
+   [
+    1170.0,
+    1428.5
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-blue-yellow-18.png",
+  "kind": "diag-blue-yellow",
+  "source_scan": "Scan_20261123-10",
+  "crop_quad_px": [
+   [
+    978.5,
+    214.6
+   ],
+   [
+    1179.1,
+    206.2
+   ],
+   [
+    1187.3,
+    405.5
+   ],
+   [
+    986.7,
+    413.8
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-blue-yellow-19.png",
+  "kind": "diag-blue-yellow",
+  "source_scan": "Scan_20261123-10",
+  "crop_quad_px": [
+   [
+    1179.1,
+    206.2
+   ],
+   [
+    1379.7,
+    197.9
+   ],
+   [
+    1387.9,
+    397.2
+   ],
+   [
+    1187.3,
+    405.5
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-blue-yellow-20.png",
+  "kind": "diag-blue-yellow",
+  "source_scan": "Scan_20261123-10",
+  "crop_quad_px": [
+   [
+    986.7,
+    413.8
+   ],
+   [
+    1187.3,
+    405.5
+   ],
+   [
+    1195.6,
+    604.7
+   ],
+   [
+    995.0,
+    613.0
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-blue-yellow-21.png",
+  "kind": "diag-blue-yellow",
+  "source_scan": "Scan_20261123-10",
+  "crop_quad_px": [
+   [
+    1187.3,
+    405.5
+   ],
+   [
+    1387.9,
+    397.2
+   ],
+   [
+    1396.2,
+    596.4
+   ],
+   [
+    1195.6,
+    604.7
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-blue-yellow-22.png",
+  "kind": "diag-blue-yellow",
+  "source_scan": "Scan_20261123-11",
+  "crop_quad_px": [
+   [
+    978.8,
+    214.5
+   ],
+   [
+    1179.2,
+    206.3
+   ],
+   [
+    1187.4,
+    405.9
+   ],
+   [
+    987.0,
+    414.2
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-blue-yellow-23.png",
+  "kind": "diag-blue-yellow",
+  "source_scan": "Scan_20261123-11",
+  "crop_quad_px": [
+   [
+    1179.2,
+    206.3
+   ],
+   [
+    1379.5,
+    198.1
+   ],
+   [
+    1387.7,
+    397.7
+   ],
+   [
+    1187.4,
+    405.9
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-blue-yellow-24.png",
+  "kind": "diag-blue-yellow",
+  "source_scan": "Scan_20261123-11",
+  "crop_quad_px": [
+   [
+    987.0,
+    414.2
+   ],
+   [
+    1187.4,
+    405.9
+   ],
+   [
+    1195.6,
+    605.6
+   ],
+   [
+    995.2,
+    613.8
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-blue-yellow-25.png",
+  "kind": "diag-blue-yellow",
+  "source_scan": "Scan_20261123-11",
+  "crop_quad_px": [
+   [
+    1187.4,
+    405.9
+   ],
+   [
+    1387.7,
+    397.7
+   ],
+   [
+    1395.9,
+    597.3
+   ],
+   [
+    1195.6,
+    605.6
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-01.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-7",
+  "crop_quad_px": [
+   [
+    491.3,
+    1912.4
+   ],
+   [
+    688.2,
+    1937.8
+   ],
+   [
+    663.0,
+    2133.1
+   ],
+   [
+    466.1,
+    2107.7
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-02.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-7",
+  "crop_quad_px": [
+   [
+    548.2,
+    1710.3
+   ],
+   [
+    736.7,
+    1649.9
+   ],
+   [
+    797.0,
+    1838.4
+   ],
+   [
+    608.5,
+    1898.8
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-03.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-7",
+  "crop_quad_px": [
+   [
+    962.6,
+    1597.0
+   ],
+   [
+    1159.7,
+    1641.8
+   ],
+   [
+    1115.6,
+    1835.5
+   ],
+   [
+    918.5,
+    1790.6
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-04.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-7",
+  "crop_quad_px": [
+   [
+    874.8,
+    1422.9
+   ],
+   [
+    1037.8,
+    1310.1
+   ],
+   [
+    1151.6,
+    1474.4
+   ],
+   [
+    988.6,
+    1587.2
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-05.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-7",
+  "crop_quad_px": [
+   [
+    185.5,
+    886.8
+   ],
+   [
+    372.0,
+    961.6
+   ],
+   [
+    297.9,
+    1146.3
+   ],
+   [
+    111.4,
+    1071.4
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-06.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-7",
+  "crop_quad_px": [
+   [
+    1160.0,
+    376.9
+   ],
+   [
+    1361.0,
+    369.4
+   ],
+   [
+    1368.3,
+    566.5
+   ],
+   [
+    1167.3,
+    574.0
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-07.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-7",
+  "crop_quad_px": [
+   [
+    816.2,
+    311.0
+   ],
+   [
+    1016.2,
+    314.4
+   ],
+   [
+    1012.8,
+    512.0
+   ],
+   [
+    812.9,
+    508.6
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-08.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-7",
+  "crop_quad_px": [
+   [
+    177.0,
+    161.4
+   ],
+   [
+    366.2,
+    233.2
+   ],
+   [
+    296.2,
+    417.6
+   ],
+   [
+    107.0,
+    345.8
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-09.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-8",
+  "crop_quad_px": [
+   [
+    379.0,
+    1477.8
+   ],
+   [
+    576.0,
+    1459.1
+   ],
+   [
+    594.7,
+    1655.8
+   ],
+   [
+    397.6,
+    1674.5
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-10.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-8",
+  "crop_quad_px": [
+   [
+    912.0,
+    746.7
+   ],
+   [
+    1062.5,
+    876.9
+   ],
+   [
+    932.8,
+    1026.9
+   ],
+   [
+    782.3,
+    896.8
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-11.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-8",
+  "crop_quad_px": [
+   [
+    1076.7,
+    442.6
+   ],
+   [
+    1225.2,
+    307.6
+   ],
+   [
+    1359.3,
+    455.2
+   ],
+   [
+    1210.9,
+    590.1
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-12.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-9",
+  "crop_quad_px": [
+   [
+    117.1,
+    960.9
+   ],
+   [
+    319.5,
+    916.3
+   ],
+   [
+    361.6,
+    1107.2
+   ],
+   [
+    159.1,
+    1151.7
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-13.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-10",
+  "crop_quad_px": [
+   [
+    502.8,
+    208.7
+   ],
+   [
+    704.6,
+    206.2
+   ],
+   [
+    707.0,
+    405.1
+   ],
+   [
+    505.3,
+    407.6
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-14.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-10",
+  "crop_quad_px": [
+   [
+    704.6,
+    206.2
+   ],
+   [
+    906.4,
+    203.7
+   ],
+   [
+    908.8,
+    402.6
+   ],
+   [
+    707.0,
+    405.1
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-15.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-10",
+  "crop_quad_px": [
+   [
+    505.3,
+    407.6
+   ],
+   [
+    707.0,
+    405.1
+   ],
+   [
+    709.5,
+    604.1
+   ],
+   [
+    507.7,
+    606.6
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-16.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-10",
+  "crop_quad_px": [
+   [
+    707.0,
+    405.1
+   ],
+   [
+    908.8,
+    402.6
+   ],
+   [
+    911.3,
+    601.6
+   ],
+   [
+    709.5,
+    604.1
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-17.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-10",
+  "crop_quad_px": [
+   [
+    609.8,
+    1927.0
+   ],
+   [
+    788.9,
+    1847.3
+   ],
+   [
+    870.6,
+    2030.8
+   ],
+   [
+    691.5,
+    2110.6
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-18.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-11",
+  "crop_quad_px": [
+   [
+    772.0,
+    873.7
+   ],
+   [
+    970.4,
+    838.0
+   ],
+   [
+    1005.9,
+    1035.4
+   ],
+   [
+    807.5,
+    1071.1
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-19.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-11",
+  "crop_quad_px": [
+   [
+    970.4,
+    838.0
+   ],
+   [
+    1168.7,
+    802.3
+   ],
+   [
+    1204.2,
+    999.7
+   ],
+   [
+    1005.9,
+    1035.4
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-20.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-11",
+  "crop_quad_px": [
+   [
+    1168.7,
+    802.3
+   ],
+   [
+    1367.1,
+    766.5
+   ],
+   [
+    1402.6,
+    964.0
+   ],
+   [
+    1204.2,
+    999.7
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-21.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-11",
+  "crop_quad_px": [
+   [
+    807.5,
+    1071.1
+   ],
+   [
+    1005.9,
+    1035.4
+   ],
+   [
+    1041.4,
+    1232.8
+   ],
+   [
+    843.1,
+    1268.5
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-22.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-11",
+  "crop_quad_px": [
+   [
+    1005.9,
+    1035.4
+   ],
+   [
+    1204.2,
+    999.7
+   ],
+   [
+    1239.8,
+    1197.1
+   ],
+   [
+    1041.4,
+    1232.8
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-23.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-11",
+  "crop_quad_px": [
+   [
+    1204.2,
+    999.7
+   ],
+   [
+    1402.6,
+    964.0
+   ],
+   [
+    1438.1,
+    1161.4
+   ],
+   [
+    1239.8,
+    1197.1
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-24.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-11",
+  "crop_quad_px": [
+   [
+    843.1,
+    1268.5
+   ],
+   [
+    1041.4,
+    1232.8
+   ],
+   [
+    1077.0,
+    1430.3
+   ],
+   [
+    878.6,
+    1466.0
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-25.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-11",
+  "crop_quad_px": [
+   [
+    1041.4,
+    1232.8
+   ],
+   [
+    1239.8,
+    1197.1
+   ],
+   [
+    1275.3,
+    1394.6
+   ],
+   [
+    1077.0,
+    1430.3
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-26.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-11",
+  "crop_quad_px": [
+   [
+    1239.8,
+    1197.1
+   ],
+   [
+    1438.1,
+    1161.4
+   ],
+   [
+    1473.7,
+    1358.9
+   ],
+   [
+    1275.3,
+    1394.6
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-27.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-11",
+  "crop_quad_px": [
+   [
+    502.8,
+    208.6
+   ],
+   [
+    704.6,
+    206.2
+   ],
+   [
+    707.0,
+    405.1
+   ],
+   [
+    505.2,
+    407.6
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-28.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-11",
+  "crop_quad_px": [
+   [
+    704.6,
+    206.2
+   ],
+   [
+    906.4,
+    203.7
+   ],
+   [
+    908.8,
+    402.7
+   ],
+   [
+    707.0,
+    405.1
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-29.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-11",
+  "crop_quad_px": [
+   [
+    505.2,
+    407.6
+   ],
+   [
+    707.0,
+    405.1
+   ],
+   [
+    709.5,
+    604.1
+   ],
+   [
+    507.7,
+    606.6
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-30.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-11",
+  "crop_quad_px": [
+   [
+    707.0,
+    405.1
+   ],
+   [
+    908.8,
+    402.7
+   ],
+   [
+    911.3,
+    601.6
+   ],
+   [
+    709.5,
+    604.1
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/diag-red-white-31.png",
+  "kind": "diag-red-white",
+  "source_scan": "Scan_20261123-11",
+  "crop_quad_px": [
+   [
+    369.9,
+    1542.0
+   ],
+   [
+    547.9,
+    1459.3
+   ],
+   [
+    633.8,
+    1644.3
+   ],
+   [
+    455.8,
+    1727.0
+   ]
+  ],
+  "orientation": "dark triangle top-left"
+ },
+ {
+  "file": "faces/all/solid-blue-01.png",
+  "kind": "solid-blue",
+  "source_scan": "Scan_20261123-7",
+  "crop_quad_px": [
+   [
+    415.8,
+    1010.4
+   ],
+   [
+    614.0,
+    1047.8
+   ],
+   [
+    577.4,
+    1241.7
+   ],
+   [
+    379.2,
+    1204.3
+   ]
+  ],
+  "orientation": "as scanned"
+ },
+ {
+  "file": "faces/all/solid-blue-02.png",
+  "kind": "solid-blue",
+  "source_scan": "Scan_20261123-7",
+  "crop_quad_px": [
+   [
+    748.7,
+    1013.7
+   ],
+   [
+    950.3,
+    1003.0
+   ],
+   [
+    960.8,
+    1199.2
+   ],
+   [
+    759.2,
+    1209.9
+   ]
+  ],
+  "orientation": "as scanned"
+ },
+ {
+  "file": "faces/all/solid-blue-03.png",
+  "kind": "solid-blue",
+  "source_scan": "Scan_20261123-7",
+  "crop_quad_px": [
+   [
+    507.8,
+    65.3
+   ],
+   [
+    707.8,
+    43.4
+   ],
+   [
+    729.3,
+    239.2
+   ],
+   [
+    529.2,
+    261.0
+   ]
+  ],
+  "orientation": "as scanned"
+ },
+ {
+  "file": "faces/all/solid-blue-04.png",
+  "kind": "solid-blue",
+  "source_scan": "Scan_20261123-8",
+  "crop_quad_px": [
+   [
+    523.2,
+    1126.5
+   ],
+   [
+    696.1,
+    1025.5
+   ],
+   [
+    794.6,
+    1194.2
+   ],
+   [
+    621.7,
+    1295.2
+   ]
+  ],
+  "orientation": "as scanned"
+ },
+ {
+  "file": "faces/all/solid-red-01.png",
+  "kind": "solid-red",
+  "source_scan": "Scan_20261123-7",
+  "crop_quad_px": [
+   [
+    872.9,
+    1880.4
+   ],
+   [
+    1069.3,
+    1849.4
+   ],
+   [
+    1100.1,
+    2044.5
+   ],
+   [
+    903.7,
+    2075.5
+   ]
+  ],
+  "orientation": "as scanned"
+ },
+ {
+  "file": "faces/all/solid-red-02.png",
+  "kind": "solid-red",
+  "source_scan": "Scan_20261123-7",
+  "crop_quad_px": [
+   [
+    1340.5,
+    1530.3
+   ],
+   [
+    1539.8,
+    1539.2
+   ],
+   [
+    1531.0,
+    1736.3
+   ],
+   [
+    1331.7,
+    1727.3
+   ]
+  ],
+  "orientation": "as scanned"
+ },
+ {
+  "file": "faces/all/solid-red-03.png",
+  "kind": "solid-red",
+  "source_scan": "Scan_20261123-7",
+  "crop_quad_px": [
+   [
+    977.0,
+    686.1
+   ],
+   [
+    1176.6,
+    671.4
+   ],
+   [
+    1191.1,
+    868.4
+   ],
+   [
+    991.4,
+    883.0
+   ]
+  ],
+  "orientation": "as scanned"
+ },
+ {
+  "file": "faces/all/solid-red-04.png",
+  "kind": "solid-red",
+  "source_scan": "Scan_20261123-8",
+  "crop_quad_px": [
+   [
+    1337.8,
+    1475.7
+   ],
+   [
+    1513.5,
+    1572.6
+   ],
+   [
+    1417.6,
+    1746.4
+   ],
+   [
+    1242.0,
+    1649.4
+   ]
+  ],
+  "orientation": "as scanned"
+ },
+ {
+  "file": "faces/all/solid-red-05.png",
+  "kind": "solid-red",
+  "source_scan": "Scan_20261123-8",
+  "crop_quad_px": [
+   [
+    1012.4,
+    1347.4
+   ],
+   [
+    1195.0,
+    1427.8
+   ],
+   [
+    1115.1,
+    1609.5
+   ],
+   [
+    932.4,
+    1529.1
+   ]
+  ],
+  "orientation": "as scanned"
+ },
+ {
+  "file": "faces/all/solid-red-06.png",
+  "kind": "solid-red",
+  "source_scan": "Scan_20261123-8",
+  "crop_quad_px": [
+   [
+    1130.8,
+    806.0
+   ],
+   [
+    1307.1,
+    893.4
+   ],
+   [
+    1218.4,
+    1072.3
+   ],
+   [
+    1042.1,
+    984.9
+   ]
+  ],
+  "orientation": "as scanned"
+ },
+ {
+  "file": "faces/all/solid-red-07.png",
+  "kind": "solid-red",
+  "source_scan": "Scan_20261123-10",
+  "crop_quad_px": [
+   [
+    366.3,
+    1248.0
+   ],
+   [
+    552.8,
+    1325.4
+   ],
+   [
+    476.8,
+    1508.6
+   ],
+   [
+    290.3,
+    1431.1
+   ]
+  ],
+  "orientation": "as scanned"
+ },
+ {
+  "file": "faces/all/solid-red-08.png",
+  "kind": "solid-red",
+  "source_scan": "Scan_20261123-11",
+  "crop_quad_px": [
+   [
+    187.3,
+    1707.0
+   ],
+   [
+    379.0,
+    1652.7
+   ],
+   [
+    433.0,
+    1843.0
+   ],
+   [
+    241.4,
+    1897.4
+   ]
+  ],
+  "orientation": "as scanned"
+ },
+ {
+  "file": "faces/all/solid-red-09.png",
+  "kind": "solid-red",
+  "source_scan": "Scan_20261123-11",
+  "crop_quad_px": [
+   [
+    297.6,
+    808.5
+   ],
+   [
+    493.6,
+    848.4
+   ],
+   [
+    452.4,
+    1050.5
+   ],
+   [
+    256.4,
+    1010.6
+   ]
+  ],
+  "orientation": "as scanned"
+ },
+ {
+  "file": "faces/all/solid-white-01.png",
+  "kind": "solid-white",
+  "source_scan": "Scan_20261123-7",
+  "crop_quad_px": [
+   [
+    1336.5,
+    641.8
+   ],
+   [
+    1534.1,
+    664.8
+   ],
+   [
+    1511.2,
+    861.6
+   ],
+   [
+    1313.6,
+    838.6
+   ]
+  ],
+  "orientation": "as scanned"
+ },
+ {
+  "file": "faces/all/solid-white-02.png",
+  "kind": "solid-white",
+  "source_scan": "Scan_20261123-7",
+  "crop_quad_px": [
+   [
+    1090.2,
+    91.3
+   ],
+   [
+    1288.3,
+    92.7
+   ],
+   [
+    1287.0,
+    291.3
+   ],
+   [
+    1088.8,
+    289.9
+   ]
+  ],
+  "orientation": "as scanned"
+ },
+ {
+  "file": "faces/all/solid-white-03.png",
+  "kind": "solid-white",
+  "source_scan": "Scan_20261123-8",
+  "crop_quad_px": [
+   [
+    440.3,
+    1722.9
+   ],
+   [
+    632.2,
+    1669.6
+   ],
+   [
+    685.3,
+    1860.5
+   ],
+   [
+    493.3,
+    1913.9
+   ]
+  ],
+  "orientation": "as scanned"
+ },
+ {
+  "file": "faces/all/solid-white-04.png",
+  "kind": "solid-white",
+  "source_scan": "Scan_20261123-10",
+  "crop_quad_px": [
+   [
+    987.5,
+    1996.4
+   ],
+   [
+    1161.1,
+    1901.8
+   ],
+   [
+    1255.2,
+    2074.3
+   ],
+   [
+    1081.6,
+    2168.9
+   ]
+  ],
+  "orientation": "as scanned"
+ },
+ {
+  "file": "faces/all/solid-white-05.png",
+  "kind": "solid-white",
+  "source_scan": "Scan_20261123-11",
+  "crop_quad_px": [
+   [
+    1199.9,
+    1623.3
+   ],
+   [
+    1388.6,
+    1686.2
+   ],
+   [
+    1326.1,
+    1873.7
+   ],
+   [
+    1137.4,
+    1810.8
+   ]
+  ],
+  "orientation": "as scanned"
+ },
+ {
+  "file": "faces/all/solid-white-06.png",
+  "kind": "solid-white",
+  "source_scan": "Scan_20261123-11",
+  "crop_quad_px": [
+   [
+    1318.9,
+    1910.1
+   ],
+   [
+    1466.1,
+    1780.4
+   ],
+   [
+    1596.1,
+    1927.9
+   ],
+   [
+    1449.0,
+    2057.6
+   ]
+  ],
+  "orientation": "as scanned"
+ },
+ {
+  "file": "faces/all/solid-yellow-01.png",
+  "kind": "solid-yellow",
+  "source_scan": "Scan_20261123-7",
+  "crop_quad_px": [
+   [
+    1238.8,
+    1267.1
+   ],
+   [
+    1433.9,
+    1306.5
+   ],
+   [
+    1394.8,
+    1500.6
+   ],
+   [
+    1199.7,
+    1461.3
+   ]
+  ],
+  "orientation": "as scanned"
+ },
+ {
+  "file": "faces/all/solid-yellow-02.png",
+  "kind": "solid-yellow",
+  "source_scan": "Scan_20261123-7",
+  "crop_quad_px": [
+   [
+    1081.9,
+    994.9
+   ],
+   [
+    1279.5,
+    968.5
+   ],
+   [
+    1305.7,
+    1165.3
+   ],
+   [
+    1108.2,
+    1191.6
+   ]
+  ],
+  "orientation": "as scanned"
+ },
+ {
+  "file": "faces/all/solid-yellow-03.png",
+  "kind": "solid-yellow",
+  "source_scan": "Scan_20261123-8",
+  "crop_quad_px": [
+   [
+    1165.0,
+    1279.6
+   ],
+   [
+    1326.3,
+    1162.6
+   ],
+   [
+    1442.7,
+    1323.0
+   ],
+   [
+    1281.3,
+    1440.0
+   ]
+  ],
+  "orientation": "as scanned"
+ },
+ {
+  "file": "faces/all/solid-yellow-04.png",
+  "kind": "solid-yellow",
+  "source_scan": "Scan_20261123-8",
+  "crop_quad_px": [
+   [
+    573.3,
+    540.5
+   ],
+   [
+    758.6,
+    608.6
+   ],
+   [
+    690.0,
+    795.2
+   ],
+   [
+    504.7,
+    727.1
+   ]
+  ],
+  "orientation": "as scanned"
+ },
+ {
+  "file": "faces/all/solid-yellow-05.png",
+  "kind": "solid-yellow",
+  "source_scan": "Scan_20261123-11",
+  "crop_quad_px": [
+   [
+    259.6,
+    1103.1
+   ],
+   [
+    447.4,
+    1042.3
+   ],
+   [
+    508.3,
+    1230.4
+   ],
+   [
+    320.5,
+    1291.2
+   ]
+  ],
+  "orientation": "as scanned"
+ }
+]

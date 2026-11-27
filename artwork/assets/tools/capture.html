@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Color Cube Print Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Layout: slicer viewport with layer + move sliders under it; settings and filament usage in a side column; stacked on phones */
+  --bg: #EEF0F3;
+  --surface: #FFFFFF;
+  --ink: #161A26;
+  --muted: #596173;
+  --line: #D9DDE5;
+  --accent: #1B5DA9;
+  --accent-ink: #FFFFFF;
+  --stage: #DADDE2;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111318; --surface: #1A1D24; --ink: #E8EAF0; --muted: #9AA1B0; --line: #2C313B;
+    --accent: #6FA8EE; --accent-ink: #111318; --stage: #23262D; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111318; --surface: #1A1D24; --ink: #E8EAF0; --muted: #9AA1B0; --line: #2C313B;
+  --accent: #6FA8EE; --accent-ink: #111318; --stage: #23262D; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); line-height: 1.5; }
+.wrap { max-width: 1200px; margin: 0 auto; padding: 20px 16px 40px; display: flex; flex-direction: column; gap: 16px; }
+header { display: flex; flex-direction: column; gap: 4px; max-width: 72ch; }
+h1 { font-size: clamp(1.4rem, 3vw, 1.9rem); margin: 0; line-height: 1.2; text-wrap: balance; }
+h2 { font-size: 0.75rem; margin: 0 0 8px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+p { margin: 0; }
+.lede { color: var(--muted); }
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start; }
+@media (max-width: 820px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+.viewer { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+.stage { position: relative; background: var(--stage); height: min(64vh, 620px); min-height: 320px; }
+#view { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+#view:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
+.loading { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); }
+.hud { position: absolute; left: 12px; top: 10px; font-family: var(--font-mono); font-size: 0.82rem; background: color-mix(in srgb, var(--surface) 86%, transparent); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; pointer-events: none; font-variant-numeric: tabular-nums; }
+.hud .fil { display: inline-flex; align-items: center; gap: 6px; }
+.controls { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 10px; border-top: 1px solid var(--line); }
+.slider-row { display: grid; grid-template-columns: 72px minmax(0, 1fr) auto; gap: 10px; align-items: center; }
+.slider-row label { font-size: 0.85rem; font-weight: 600; }
+.slider-row output { font-family: var(--font-mono); font-size: 0.82rem; color: var(--muted); min-width: 9ch; text-align: right; font-variant-numeric: tabular-nums; }
+input[type="range"] { width: 100%; accent-color: var(--accent); height: 28px; }
+input[type="range"]:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.buttons { display: flex; flex-wrap: wrap; gap: 6px; }
+button {
+  appearance: none; font: inherit; font-size: 0.88rem; font-weight: 500; padding: 7px 12px; border-radius: 8px;
+  border: 1px solid var(--line); background: var(--bg); color: var(--ink); cursor: pointer;
+}
+button:hover { border-color: var(--muted); }
+button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; min-width: 92px; }
+button[aria-pressed="true"] { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, var(--surface)); }
+aside { display: flex; flex-direction: column; gap: 16px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+table { width: 100%; border-collapse: collapse; font-size: 0.88rem; font-variant-numeric: tabular-nums; }
+th { text-align: left; font-weight: 600; color: var(--muted); font-size: 0.75rem; padding: 0 0 6px; }
+th.n, td.n { text-align: right; }
+td { padding: 5px 0; border-top: 1px solid var(--line); }
+td.n { font-family: var(--font-mono); font-size: 0.82rem; }
+.sw { display: inline-block; width: 14px; height: 14px; border-radius: 3px; vertical-align: -2px; margin-right: 8px; border: 1px solid rgba(0,0,0,0.18); }
+.settings { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 0.88rem; margin: 0; }
+.settings dt { color: var(--muted); }
+.settings dd { margin: 0; font-family: var(--font-mono); font-size: 0.82rem; }
+.note { font-size: 0.82rem; color: var(--muted); margin-top: 10px; }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Color Cube print preview</h1>
+    <p class="lede">One cube sliced into 0.2 mm layers, shown the way a slicer previews a multi-color print: every bead of plastic is the color of the filament that lays it down. Drag the layer slider to build the cube up, or press Play.</p>
+  </header>
+
+  <div class="layout">
+    <section class="viewer" aria-label="Print preview">
+      <div class="stage">
+        <canvas id="view" tabindex="0" aria-label="Sliced cube preview. Drag to turn, pinch or scroll to zoom."></canvas>
+        <div class="loading" id="loading">Slicing the cube…</div>
+        <div class="hud" id="hud" hidden></div>
+      </div>
+      <div class="controls">
+        <div class="slider-row">
+          <label for="layer">Layer</label>
+          <input type="range" id="layer" min="1" max="1" value="1" aria-describedby="layer-out">
+          <output id="layer-out" for="layer"></output>
+        </div>
+        <div class="slider-row">
+          <label for="move">Moves</label>
+          <input type="range" id="move" min="0" max="1" value="1" aria-describedby="move-out">
+          <output id="move-out" for="move"></output>
+        </div>
+        <div class="buttons">
+          <button type="button" class="primary" id="play">Play</button>
+          <button type="button" id="restart">From layer 1</button>
+          <button type="button" data-view="iso" aria-pressed="true">Angled</button>
+          <button type="button" data-view="top" aria-pressed="false">Top</button>
+          <button type="button" data-view="front" aria-pressed="false">Front</button>
+          <button type="button" id="t-plate" aria-pressed="false">Plate of 4</button>
+        </div>
+      </div>
+    </section>
+
+    <aside>
+      <section class="panel" aria-labelledby="fil-h">
+        <h2 id="fil-h">Filament per cube</h2>
+        <table>
+          <thead><tr><th>Filament</th><th class="n">Length</th><th class="n">Weight</th></tr></thead>
+          <tbody id="fil"></tbody>
+        </table>
+        <p class="note" id="totals"></p>
+      </section>
+      <section class="panel" aria-labelledby="set-h">
+        <h2 id="set-h">Slice settings</h2>
+        <dl class="settings">
+          <dt>Cube</dt><dd>27.5 mm</dd>
+          <dt>Layer height</dt><dd>0.2 mm (first 0.3)</dd>
+          <dt>Line width</dt><dd>0.45 mm</dd>
+          <dt>Walls</dt><dd>2</dd>
+          <dt>Top/bottom shell</dt><dd>1.2 mm</dd>
+          <dt>Infill</dt><dd>15% grid, white</dd>
+          <dt>On the bed</dt><dd>blue/yellow face</dd>
+        </dl>
+        <p class="note">Each face is a 1.2 mm skin of its own color around a white core. The white and yellow triangles sit 1 mm below a 1.7 mm rim, with walls in the triangle's color. Your actual 3MF part split and slicer settings may differ.</p>
+      </section>
+    </aside>
+  </div>
+</div>
+
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+// ------------------------------------------------------------------ slicing
+const S = 27.5, h = S / 2, LH = 0.2, W = 0.45, SHELL = 1.2, RIM = 1.7, POCKET = 1.0, INFILL = 0.15;
+const FIL = [
+  { key: "r", name: "Red",    hex: "#E42C39" },
+  { key: "y", name: "Yellow", hex: "#EBC465" },
+  { key: "w", name: "White",  hex: "#F3F3EF" },
+  { key: "b", name: "Blue",   hex: "#1B5DA9" }
+];
+const FI = { r: 0, y: 1, w: 2, b: 3 };
+const FIRST = 0.3;                                   // first layer 0.3 mm, then 0.2 mm: 137 layers = exactly 27.5 mm
+const NL = Math.round((S - FIRST) / LH) + 1;
+const zTop = (L) => FIRST + L * LH, thick = (L) => (L === 0 ? FIRST : LH);
+
+// recessed triangle (plan view, x east, y north): SE half, inset RIM from the E and S edges
+const T = [[h - RIM, h - RIM], [h - RIM, -h + RIM], [-h + RIM, -h + RIM]];
+const inTri = (x, y) => x <= h - RIM && y >= -h + RIM && x >= y;
+function segDist(px, py, ax, ay, bx, by) {
+  const dx = bx - ax, dy = by - ay, t = Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy)));
+  return Math.hypot(px - ax - t * dx, py - ay - t * dy);
+}
+const triDist = (x, y) => Math.min(segDist(x, y, ...T[0], ...T[1]), segDist(x, y, ...T[1], ...T[2]), segDist(x, y, ...T[2], ...T[0]));
+
+// what is at (x, y, z)? null = empty; else { c: filament index, solid: true for skins/walls }
+function at(x, y, z) {
+  if (Math.abs(x) > h || Math.abs(y) > h || z < 0 || z > S) return null;
+  const tri = inTri(x, y);
+  if (tri && (z > S - POCKET || z < POCKET)) return null;
+  let best = h - y, c = "r";                       // north: red
+  const cand = [[h + y, "w"], [h - x, "y"], [h + x, "b"],                 // south white, east yellow, west blue
+    [(tri ? S - POCKET : S) - z, tri ? "w" : "r"],                          // top: red, white recessed
+    [z - (tri ? POCKET : 0), tri ? "y" : "b"]];                             // bottom: blue, yellow recessed
+  if (!tri && z > S - POCKET) cand.push([triDist(x, y), "w"]);              // pocket walls take the triangle's color
+  if (!tri && z < POCKET) cand.push([triDist(x, y), "y"]);
+  for (const [d, cc] of cand) if (d < best) { best = d; c = cc; }
+  return best < SHELL ? { c: FI[c], solid: true } : { c: FI.w, solid: false };
+}
+
+function slice() {
+  const layers = [];
+  for (let L = 0; L < NL; L++) {
+    const z = zTop(L) - thick(L) / 2, pocket = z > S - POCKET || z < POCKET;
+    const segs = [];   // [x1, y1, x2, y2, color, kind]
+    const run = (pts, kind, keep) => {   // pts: array of [x, y]; split into same-color runs
+      let cur = null;
+      const flush = () => { if (cur && cur.n > 1) segs.push([cur.x1, cur.y1, cur.x2, cur.y2, cur.c, kind]); cur = null; };
+      for (const [x, y] of pts) {
+        const a = at(x, y, z);
+        if (!a || !keep(a, x, y)) { flush(); continue; }
+        if (cur && cur.c === a.c) { cur.x2 = x; cur.y2 = y; cur.n++; }
+        else { flush(); cur = { x1: x, y1: y, x2: x, y2: y, c: a.c, n: 1 }; }
+      }
+      flush();
+    };
+    const step = 0.2;
+    const walk = (poly, closed) => {
+      const out = []; const n = poly.length;
+      for (let i = 0; i < (closed ? n : n - 1); i++) {
+        const [ax, ay] = poly[i], [bx, by] = poly[(i + 1) % n];
+        const len = Math.hypot(bx - ax, by - ay), k = Math.max(1, Math.round(len / step));
+        for (let j = 0; j <= k; j++) out.push([ax + (bx - ax) * j / k, ay + (by - ay) * j / k]);
+      }
+      return out;
+    };
+    // walls: inner then outer (each side splits where the face color changes)
+    for (const k of [1, 0]) {
+      const d = W * (k + 0.5), e = h - d;
+      run(walk([[-e, -e], [e, -e], [e, e], [-e, e]], true), "wall", () => true);
+    }
+    // pocket walls (top and bottom 1 mm)
+    if (pocket) {
+      for (const k of [1, 0]) {
+        const d = W * (k + 0.5);
+        const poly = offsetTri(d);
+        run(walk(poly, true), "wall", (a, x, y) => Math.abs(x) < h - 2 * W && Math.abs(y) < h - 2 * W);
+      }
+    }
+    // infill area: inside the walls, outside the pocket walls
+    const inner = (x, y) => Math.abs(x) <= h - 2 * W && Math.abs(y) <= h - 2 * W && (!pocket || (!inTri(x, y) && triDist(x, y) >= 2 * W));
+    const lines = (angle, spacing, keepSolid) => {
+      const dx = Math.cos(angle), dy = Math.sin(angle), nx = -dy, ny = dx, R = h * 1.42;
+      for (let c = -R; c <= R; c += spacing) {
+        const pts = [];
+        for (let t = -R; t <= R; t += step) pts.push([c * nx + t * dx, c * ny + t * dy]);
+        run(pts, keepSolid ? "solid" : "sparse", (a, x, y) => inner(x, y) && a.solid === keepSolid);
+      }
+    };
+    lines(L % 2 ? -Math.PI / 4 : Math.PI / 4, W, true);                         // solid skin, alternating 45°
+    const sp = 2 * W / INFILL;
+    lines(Math.PI / 4, sp, false); lines(-Math.PI / 4, sp, false);              // sparse grid
+    layers.push({ z, t: thick(L), segs });
+  }
+  return layers;
+}
+function offsetTri(d) {   // offset the recess triangle outward by d (convex polygon)
+  const P = T, n = P.length, area = P.reduce((s, p, i) => s + p[0] * P[(i + 1) % n][1] - P[(i + 1) % n][0] * p[1], 0);
+  const sgn = area > 0 ? 1 : -1, lines = [];
+  for (let i = 0; i < n; i++) {
+    const [ax, ay] = P[i], [bx, by] = P[(i + 1) % n], L = Math.hypot(bx - ax, by - ay);
+    const nx = sgn * (by - ay) / L, ny = -sgn * (bx - ax) / L;   // outward normal
+    lines.push([ax + nx * d, ay + ny * d, bx + nx * d, by + ny * d]);
+  }
+  const out = [];
+  for (let i = 0; i < n; i++) {
+    const [x1, y1, x2, y2] = lines[(i + n - 1) % n], [x3, y3, x4, y4] = lines[i];
+    const den = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+    const px = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / den;
+    const py = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / den;
+    out.push([px, py]);
+  }
+  return out;
+}
+
+// order each layer by filament (one change per color, starting with the color already loaded)
+function orderMoves(layers) {
+  const KIND = { wall: 0, solid: 1, sparse: 2 };
+  let loaded = null, changes = 0;
+  for (const L of layers) {
+    const used = [...new Set(L.segs.map((s) => s[4]))];
+    used.sort((a, b) => (a === loaded ? -1 : b === loaded ? 1 : a - b));
+    const byColor = used.map((c) => L.segs.filter((s) => s[4] === c).sort((a, b) => KIND[a[5]] - KIND[b[5]]));
+    L.segs = byColor.flat();
+    for (const c of used) { if (loaded !== null && c !== loaded) changes++; loaded = c; }
+  }
+  return changes;
+}
+
+// ------------------------------------------------------------------ rendering
+const canvas = document.getElementById("view");
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(30, 1, 1, 2000);
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true; controls.target.set(0, 12, 0);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x8a8f99, 1.1));
+const key = new THREE.DirectionalLight(0xffffff, 1.6); key.position.set(-40, 80, 50); scene.add(key);
+const rim = new THREE.DirectionalLight(0xffffff, 0.5); rim.position.set(50, 30, -40); scene.add(rim);
+
+function cssVar(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+function applyTheme() { scene.background = new THREE.Color(cssVar("--stage") || "#DADDE2"); }
+applyTheme();
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", applyTheme);
+
+// build plate (textured PEI look with a grid)
+const plate = new THREE.Group();
+const plateMesh = new THREE.Mesh(new THREE.BoxGeometry(120, 1, 120), new THREE.MeshStandardMaterial({ color: 0x3b3e45, roughness: 0.9 }));
+plateMesh.position.y = -0.5; plate.add(plateMesh);
+const grid = new THREE.GridHelper(120, 24, 0x5c6270, 0x4a4f5a); grid.position.y = 0.01; plate.add(grid);
+scene.add(plate);
+
+const VIEWS = { iso: [52, 46, 64], top: [0, 105, 0.02], front: [0, 14, 90] };
+function setView(name) {
+  const far = plateMode ? 1.55 : 1;
+  camera.position.set(...VIEWS[name].map((v) => v * far));
+  controls.target.set(0, plateMode ? 6 : 12, 0); controls.update();
+  document.querySelectorAll("[data-view]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.view === name ? "true" : "false"));
+}
+
+let layers, counts, cum, mesh, plateMode = false, offsets = [[0, 0]];
+const layerIn = document.getElementById("layer"), moveIn = document.getElementById("move");
+const layerOut = document.getElementById("layer-out"), moveOut = document.getElementById("move-out"), hud = document.getElementById("hud");
+
+function buildMesh() {
+  if (mesh) { scene.remove(mesh); mesh.geometry.dispose(); }
+  const geo = new THREE.CylinderGeometry(0.5, 0.5, 1, 6, 1, true); geo.rotateZ(Math.PI / 2);
+  const total = cum[cum.length - 1] * offsets.length;
+  mesh = new THREE.InstancedMesh(geo, new THREE.MeshStandardMaterial({ roughness: 0.55, metalness: 0 }), total);
+  const m = new THREE.Matrix4(), q = new THREE.Quaternion(), p = new THREE.Vector3(), s = new THREE.Vector3(), up = new THREE.Vector3(0, 1, 0);
+  const cols = FIL.map((f) => new THREE.Color(f.hex));
+  let i = 0;
+  // instances are laid out layer by layer; within a layer, move by move across every cube on the plate (colors stay grouped)
+  for (const L of layers) {
+    for (const [x1, y1, x2, y2, c] of L.segs) {
+      for (const [ox, oy] of offsets) {
+        const dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy) + W * 0.9;
+        p.set((x1 + x2) / 2 + ox, L.z, -((y1 + y2) / 2 + oy));
+        q.setFromAxisAngle(up, Math.atan2(dy, dx));
+        s.set(len, L.t * 1.02, W);
+        m.compose(p, q, s); mesh.setMatrixAt(i, m); mesh.setColorAt(i, cols[c]); i++;
+      }
+    }
+  }
+  mesh.instanceMatrix.needsUpdate = true; mesh.instanceColor.needsUpdate = true;
+  scene.add(mesh);
+}
+function perLayer(L) { return counts[L] * offsets.length; }
+function startOf(L) { return cum[L] * offsets.length; }
+
+function show(layer, moves) {   // layer: 1-based
+  const L = layer - 1, n = perLayer(L);
+  moves = Math.max(0, Math.min(n, moves));
+  mesh.count = startOf(L) + moves;
+  layerIn.value = layer; moveIn.max = n; moveIn.value = moves;
+  layerOut.textContent = `${layer} / ${NL}`;
+  moveOut.textContent = `${moves} / ${n}`;
+  const z = zTop(layer - 1).toFixed(2);
+  const seg = layers[L].segs[Math.floor(Math.max(0, moves - 1) / offsets.length) % Math.max(1, counts[L])] || layers[L].segs[0];
+  const f = seg ? FIL[seg[4]] : FIL[2];
+  hud.innerHTML = `Z ${z} mm &nbsp;·&nbsp; <span class="fil"><span class="sw" style="background:${f.hex}"></span>${f.name}</span>`;
+  hud.hidden = false;
+}
+layerIn.addEventListener("input", () => { stop(); show(+layerIn.value, perLayer(+layerIn.value - 1)); });
+moveIn.addEventListener("input", () => { stop(); show(+layerIn.value, +moveIn.value); });
+
+// play
+let playing = false, raf = null;
+const playBtn = document.getElementById("play");
+function stop() { playing = false; playBtn.textContent = "Play"; }
+playBtn.addEventListener("click", () => {
+  if (playing) { stop(); return; }
+  let layer = +layerIn.value, moves = +moveIn.value;
+  if (layer >= NL && moves >= perLayer(NL - 1)) { layer = 1; moves = 0; }
+  playing = true; playBtn.textContent = "Pause";
+  const tick = () => {
+    if (!playing) return;
+    const speed = Math.max(6, Math.round(perLayer(layer - 1) / 10));
+    moves += speed;
+    if (moves >= perLayer(layer - 1)) { if (layer < NL) { layer++; moves = 0; } else { show(layer, perLayer(layer - 1)); stop(); return; } }
+    show(layer, moves);
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+});
+document.getElementById("restart").addEventListener("click", () => { stop(); show(1, perLayer(0)); });
+document.querySelectorAll("[data-view]").forEach((b) => b.addEventListener("click", () => setView(b.dataset.view)));
+const plateBtn = document.getElementById("t-plate");
+plateBtn.addEventListener("click", () => {
+  plateMode = !plateMode; plateBtn.setAttribute("aria-pressed", plateMode ? "true" : "false");
+  const g = (S + 6) / 2; offsets = plateMode ? [[-g, g], [g, g], [-g, -g], [g, -g]] : [[0, 0]];
+  const layer = +layerIn.value, frac = +moveIn.value / Math.max(1, +moveIn.max);
+  buildMesh(); show(layer, Math.round(frac * perLayer(layer - 1)));
+  setView(document.querySelector('[data-view][aria-pressed="true"]')?.dataset.view || "iso");
+});
+
+function resize() {
+  const r = canvas.parentElement.getBoundingClientRect();
+  renderer.setSize(r.width, r.height, false); camera.aspect = r.width / Math.max(1, r.height); camera.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(canvas.parentElement); resize();
+(function loop() { controls.update(); renderer.render(scene, camera); requestAnimationFrame(loop); })();
+
+// ------------------------------------------------------------------ go
+window.capture = (layer, moves, w, hgt) => {
+  renderer.setPixelRatio(1); renderer.setSize(w, hgt, false); camera.aspect = w / hgt; camera.updateProjectionMatrix();
+  show(layer, moves); controls.update(); renderer.render(scene, camera); return canvas.toDataURL("image/png");
+};
+window.prep = () => {
+  scene.background = null; plate.visible = false;
+  const c = document.createElement("canvas"); c.width = c.height = 256; const g = c.getContext("2d");
+  const gr = g.createRadialGradient(128, 128, 10, 128, 128, 128); gr.addColorStop(0, "rgba(0,0,0,0.30)"); gr.addColorStop(0.55, "rgba(0,0,0,0.12)"); gr.addColorStop(1, "rgba(0,0,0,0)");
+  g.fillStyle = gr; g.fillRect(0, 0, 256, 256);
+  const sh = new THREE.Mesh(new THREE.PlaneGeometry(52, 52), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(c), transparent: true, depthWrite: false }));
+  sh.rotation.x = -Math.PI / 2; sh.position.y = 0.01; scene.add(sh);
+  camera.fov = 26; camera.position.set(66, 56, 82); controls.target.set(0, 13.2, 0); controls.update();
+};
+window.layerCount = () => NL; window.movesIn = (layer) => perLayer(layer - 1);
+setTimeout(() => {
+  layers = slice();
+  const changes = orderMoves(layers);
+  counts = layers.map((L) => L.segs.length);
+  cum = [0]; counts.forEach((c) => cum.push(cum[cum.length - 1] + c));
+  layerIn.max = NL;
+  buildMesh(); setView("iso"); show(NL, perLayer(NL - 1));
+  document.getElementById("loading").hidden = true;
+
+  // filament use per cube: bead cross-section as a slicer computes it (rounded rectangle)
+  const DENS = 1.24;   // PLA, g/cm³
+  const len = [0, 0, 0, 0];
+  const volume = [0, 0, 0, 0];
+  for (const L of layers) for (const [x1, y1, x2, y2, c] of L.segs) { const l = Math.hypot(x2 - x1, y2 - y1) + W * 0.5; len[c] += l; volume[c] += l * ((W - L.t) * L.t + Math.PI * (L.t / 2) ** 2); }
+  let gTot = 0;
+  document.getElementById("fil").innerHTML = FIL.map((f, i) => {
+    const m = len[i] / 1000, g = volume[i] / 1000 * DENS; gTot += g;
+    return `<tr><td><span class="sw" style="background:${f.hex}"></span>${f.name}</td><td class="n">${m.toFixed(2)} m</td><td class="n">${g.toFixed(1)} g</td></tr>`;
+  }).join("");
+  document.getElementById("totals").textContent =
+    `About ${gTot.toFixed(1)} g per cube (${(gTot * 49 / 1000).toFixed(2)} kg for 49), before purge waste. ${NL} layers and ${changes} filament changes per cube when printed alone; print a full plate so each change covers every cube on it.`;
+}, 30);
+</script>
+</body>
+</html>

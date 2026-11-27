@@ -1,0 +1,29 @@
+/* The Files page: each section a heading, a line of prose, Download all, and its files as small
+   cards with a thumbnail, the name, the size and a download link. Long groups fold away. */
+
+.files-jump { padding-block: clamp(20px, 3vw, 32px) 0; font-weight: 500; }
+.page-head + .files-jump { padding-top: 0; }
+.files-section { max-width: var(--wide); margin: 0 auto; padding: clamp(40px, 6vw, 72px) var(--gutter) 0; scroll-margin-top: 12px; }
+.files-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; border-bottom: 3px solid var(--ink); padding-bottom: 14px; margin-bottom: 18px; }
+.files-head h2 { margin: 0; }
+.files-head .btn span { font-weight: 400; opacity: 0.8; font-size: 0.92rem; }
+.files-head .btn[aria-busy="true"] { opacity: 0.7; cursor: progress; }
+.files-section > p { font-size: 1.05rem; }
+.files-section h3, .files-section summary { font-size: 1.15rem; font-weight: 650; margin: 28px 0 12px; }
+.files-section h3 span, .files-section summary span { font-weight: 400; color: var(--ink-soft); font-size: 0.95rem; }
+.files-section summary { cursor: pointer; }
+.files-section details[open] summary { margin-bottom: 12px; }
+
+.file-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px; }
+.file-grid a {
+  display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; grid-template-rows: 1fr 1fr; column-gap: 12px; row-gap: 2px; align-items: center;
+  height: 72px; padding: 8px 12px 8px 8px; border-radius: 10px; background: #fff; box-shadow: 0 0 0 1px var(--line); text-decoration: none; color: var(--ink);
+}
+.file-grid a:hover { color: var(--ink); box-shadow: 0 0 0 2px var(--navy); }
+.file-grid img, .file-grid .ph { grid-row: 1 / 3; width: 56px; height: 56px; object-fit: contain; border-radius: 6px; background: #F3F1EA; }
+.file-grid .fname { grid-column: 2 / 4; font-weight: 550; font-size: 0.95rem; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; align-self: end; }
+.file-grid .fsize { grid-column: 2; font-size: 0.85rem; color: var(--ink-soft); align-self: start; font-variant-numeric: tabular-nums; }
+.file-grid .get { grid-column: 3; grid-row: 2; align-self: start; font-weight: 600; font-size: 0.9rem; text-decoration: underline; text-underline-offset: 0.2em; }
+.file-grid a:hover .get { color: var(--red); }
+@media (max-width: 420px) { .file-grid { grid-template-columns: minmax(0, 1fr); } }
+.files-license { padding-block: clamp(40px, 6vw, 64px) clamp(32px, 5vw, 56px); }

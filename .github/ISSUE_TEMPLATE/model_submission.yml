@@ -1,0 +1,83 @@
+name: Model to add
+description: A remix, another cube, a tray, storage, a lid or anything else to print with the set.
+title: "[Model] "
+labels: ["model"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for sending a model. Please check it against the [quality bar](https://designwithcolorcubes.org/contribute/#models) first.
+        Attach the files below as one zip (GitHub takes zips up to 25 MB), or link to where the model is already posted.
+        It will go in its own folder under `community/models/`, with your name on it.
+  - type: input
+    id: name
+    attributes:
+      label: Name of the model
+      placeholder: Drawer for the 7×7 set
+    validations:
+      required: true
+  - type: textarea
+    id: about
+    attributes:
+      label: What it is
+      description: What it's for, which set or tray size it fits, and how it goes together.
+    validations:
+      required: true
+  - type: textarea
+    id: files
+    attributes:
+      label: Files
+      description: Drag in a zip with the 3MF, an STL of each part named by color (drawer-red.stl, drawer-white.stl) and your source file if you can. Or paste a link.
+    validations:
+      required: true
+  - type: textarea
+    id: photo
+    attributes:
+      label: Photo of a print
+      description: One clear photo of the thing printed from these exact files. Strip the photo's location data first.
+    validations:
+      required: true
+  - type: textarea
+    id: settings
+    attributes:
+      label: Print settings
+      description: Printer and slicer, filament, layer height, walls, infill, supports, print time.
+      value: |
+        Printer and slicer:
+        Filament:
+        Layer height:
+        Walls:
+        Infill:
+        Supports:
+        Print time:
+  - type: input
+    id: based-on
+    attributes:
+      label: Based on
+      description: If it's a remix, a link to the original and its author. Otherwise leave blank.
+  - type: dropdown
+    id: license
+    attributes:
+      label: License
+      description: Models are shared under the project's license unless you choose CC0.
+      options:
+        - CC BY 4.0 (the project's license)
+        - CC0 (no rights reserved)
+    validations:
+      required: true
+  - type: input
+    id: credit
+    attributes:
+      label: How to credit you
+      description: Your name or handle, and a link if you like.
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: Every part is a closed mesh, in millimetres, and prints without supports (or I've said why not).
+        - label: Multicolor parts are split by color and named by color.
+        - label: I made this, or the original's license allows remixes and I've credited it, and I agree to share it under the license chosen above (the same promise as the Developer Certificate of Origin, https://developercertificate.org/).
+          required: true

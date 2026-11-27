@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Notes for AI agents: https://designwithcolorcubes.org/agents.md (also /llms.txt)
+Sitemap: https://designwithcolorcubes.org/sitemap.xml

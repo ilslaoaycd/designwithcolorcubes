@@ -1,0 +1,55 @@
+/* print.css — step 3, colors and files. Builds on the box designer's layout (box.css). */
+
+.print-app .preview.three { aspect-ratio: 4 / 3; }
+.preview.flat { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: end; place-items: stretch; }
+.preview.flat[hidden] { display: none; }
+.preview.flat figure { margin: 0; }
+.preview.flat svg { display: block; width: 100%; height: auto; filter: drop-shadow(0 6px 10px rgb(30 42 90 / 0.18)); }
+.preview.flat .tray-wrap { padding: 4%; border-radius: 6px; }
+.preview.flat .tray-wrap svg { filter: none; }
+.preview.flat figcaption { text-align: center; }
+@media (max-width: 520px) { .preview.flat { grid-template-columns: minmax(0, 1fr); } }
+
+.note.top { margin: -4px 0 12px; }
+/* Until print.js writes the facts, hold a line of the usual length, so it wraps (and the view
+   below sits) where it will. */
+.facts:empty::before { content: "49 cubes · lid 200 × 200 mm · needs a 211 × 211 mm bed"; visibility: hidden; }
+
+/* One row per filament: the color it was, what it becomes, and the colors to choose from. */
+.maps { display: grid; gap: 14px; }
+.maps { gap: 4px; }
+/* Hold the four rows' space until print.js fills them in, so the page doesn't jump. */
+.maps:empty { min-height: calc(6.4em + 63px); }
+.map { display: grid; grid-template-columns: 6.5em auto minmax(0, 1fr) auto; align-items: center; gap: 6px 10px; padding: 6px 0; }
+.map .change { font-size: 0.92rem; }
+.map .swatches[hidden] { display: none; }
+.map .from, .map .to { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
+.map .from::before, .map .chip { content: ""; width: 20px; height: 20px; border-radius: 5px; background: var(--c); border: 1px solid rgb(30 42 90 / 0.25); flex: none; }
+.map .from { color: var(--ink-soft); font-weight: 500; }
+.map .arrow { color: var(--ink-soft); }
+.map .swatches { grid-column: 1 / -1; gap: 5px; }
+.map .swatches button { width: 26px; height: 26px; border-radius: 6px; }
+.map .custom { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; color: var(--ink-soft); cursor: pointer; margin-left: 4px; }
+.map .custom input { width: 30px; height: 28px; padding: 0; border: 1px solid #CFC5AA; border-radius: 6px; background: #fff; cursor: pointer; }
+
+.file-opts { margin-top: 0; }
+.all { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-top: 16px; }
+.all .note { margin: 0; }
+.all .btn:disabled { opacity: 0.6; cursor: progress; }
+.one-by-one { font-size: 1rem; font-weight: 700; margin: 22px 0 6px; }
+.file-list { list-style: none; margin: 0; padding: 0; }
+.file-item { display: grid; gap: 8px; padding: 12px 0; border-top: 1px solid var(--line); }
+.file-item b { display: block; font-weight: 650; }
+.file-item small { display: block; font-size: 0.9rem; color: var(--ink-soft); line-height: 1.4; }
+.file-acts { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+.file-acts .get { font: 600 0.95rem var(--font); color: var(--cream); background: var(--ink); border: 0; border-radius: 6px; padding: 8px 14px; cursor: pointer; }
+.file-acts .get:hover { background: var(--red); }
+.file-acts .get:disabled { opacity: 0.6; cursor: progress; }
+.file-acts .open { font-weight: 600; font-size: 0.95rem; padding: 7px 12px; border: 1px solid var(--ink); border-radius: 6px; text-decoration: none; }
+.file-acts .why { flex-basis: 100%; font-size: 0.88rem; color: var(--ink-soft); }
+
+.more summary { cursor: pointer; font-weight: 700; font-size: 1.05rem; }
+.more .filelist { margin: 12px 0 0; padding-left: 1.1em; font-size: 0.95rem; line-height: 1.5; }
+.more .filelist li { margin-bottom: 6px; }
+.file-acts button.open { background: none; color: inherit; font-family: inherit; line-height: inherit; cursor: pointer; }
+.file-acts button.open:disabled { opacity: 0.7; cursor: progress; }

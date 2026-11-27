@@ -1,0 +1,17 @@
+# Old zips, now single files on the Files page (Workers static assets redirects; not served as a file).
+/downloads/color-cubes-patterns.zip /downloads/#patterns 301
+/downloads/color-cubes-printed-kit.zip /downloads/#renders 301
+/downloads/color-cubes-printed-scenes.zip /downloads/#scenes 301
+/downloads/color-cubes-renders.zip /downloads/#renders 301
+/downloads/color-cubes-image-kit.zip /downloads/#faces 301
+/downloads/color-cubes-scanned-scenes.zip /downloads/#scenes 301
+/downloads/color-cubes-scans.zip /downloads/#scans 301
+
+# Pages asked for without their trailing slash: a permanent redirect (the assets' own is a 307).
+/patterns /patterns/ 301
+/downloads /downloads/ 301
+/contribute /contribute/ 301
+/designer /designer/ 301
+/box /box/ 301
+/print /print/ 301
+/history /history/ 301

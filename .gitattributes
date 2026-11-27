@@ -1,0 +1,6 @@
+* text=auto eol=lf
+*.3mf binary
+*.f3d binary
+*.stl binary
+*.zip binary
+*.woff2 binary

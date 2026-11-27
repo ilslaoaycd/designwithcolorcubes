@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Color Cubes box designer: a lid and tray to 3D print</title>
+<meta name="robots" content="index, follow">
+<meta name="description" content="Design the box for a set of Color Cubes of any size: arrange the designs and words on the lid, see it in 3D, and download a lid and tray ready to 3D print.">
+<link rel="canonical" href="https://designwithcolorcubes.org/box/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Design with Color Cubes">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Box designer for Color Cubes">
+<meta property="og:description" content="Put your own designs and words on the lid, for a set of any size, and download a lid and tray to 3D print.">
+<meta property="og:url" content="https://designwithcolorcubes.org/box/">
+<meta property="og:image" content="https://designwithcolorcubes.org/img/og-box.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A Color Cubes lid with twelve designs round a blue title panel, beside the words Box designer.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Box designer for Color Cubes">
+<meta name="twitter:description" content="Put your own designs and words on the lid, for a set of any size, and download a lid and tray to 3D print.">
+<meta name="twitter:image" content="https://designwithcolorcubes.org/img/og-box.png">
+<meta name="twitter:image:alt" content="A Color Cubes lid with twelve designs round a blue title panel, beside the words Box designer.">
+<meta name="theme-color" content="#1E2A5A">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-96x96.png" type="image/png" sizes="96x96">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="manifest" href="/site.webmanifest">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "WebApplication",
+   "@id": "https://designwithcolorcubes.org/box/#app",
+   "name": "Color Cubes box designer",
+   "url": "https://designwithcolorcubes.org/box/",
+   "description": "Design the lid and tray for a set of Color Cubes of any size and download them as 3MF or STL files to 3D print.",
+   "applicationCategory": "DesignApplication",
+   "operatingSystem": "Any",
+   "isAccessibleForFree": true,
+   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+   "isPartOf": { "@id": "https://designwithcolorcubes.org/#website" },
+   "creator": { "@id": "https://designwithcolorcubes.org/#isaac" }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://designwithcolorcubes.org/" },
+    { "@type": "ListItem", "position": 2, "name": "Box designer", "item": "https://designwithcolorcubes.org/box/" }
+   ]
+  }
+ ]
+}
+</script>
+<link rel="preload" href="/fonts/rubik-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/site.css">
+<link rel="stylesheet" href="/box/box.css">
+<script type="module" src="/box/box.js"></script>
+</head>
+<body class="box-page">
+
+<header class="band navy slim">
+  <div class="bar">
+    <a class="brand" href="/" aria-label="Design with Color Cubes, home">
+      <svg class="mark" aria-hidden="true" viewBox="0 0 207 207"><rect x="0" y="0" width="100" height="100" rx="14" fill="#A81F27"/><rect x="0" y="0" width="100" height="91" rx="14" fill="#E5333B"/><polygon points="6.18,5.63 6.18,85.37 93.82,5.63" fill="#FFFFFF"/><rect x="107" y="0" width="100" height="100" rx="14" fill="#173F80"/><rect x="107" y="0" width="100" height="91" rx="14" fill="#2563B8"/><polygon points="200.82,5.63 113.18,5.63 200.82,85.37" fill="#F6CF4B"/><rect x="0" y="107" width="100" height="100" rx="14" fill="#173F80"/><rect x="0" y="107" width="100" height="91" rx="14" fill="#2563B8"/><polygon points="6.18,192.37 93.82,192.37 6.18,112.63" fill="#F6CF4B"/><rect x="107" y="107" width="100" height="100" rx="14" fill="#A81F27"/><rect x="107" y="107" width="100" height="91" rx="14" fill="#E5333B"/><polygon points="200.82,192.37 200.82,112.63 113.18,192.37" fill="#FFFFFF"/></svg>
+      <span class="wordmark" aria-hidden="true"><span class="wm-small">Design with</span> <span class="wm-big">Color Cubes</span></span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="/#print" aria-current="page">Print a set</a>
+      <a href="/designer/">Designer</a>
+      <a href="/patterns/">Patterns</a>
+      <a href="/downloads/">Files</a>
+      <a href="/contribute/">Contribute</a>
+    </nav>
+  </div>
+</header>
+
+<nav class="steps" id="steps" aria-label="Steps" hidden>
+  <ol>
+    <li><a id="step-size" href="/#print">Set size</a></li>
+    <li aria-current="step">Box</li>
+    <li><a id="step-files" href="/print/">Colors and files</a></li>
+  </ol>
+</nav>
+
+<main class="box-app">
+  <section class="stage" aria-label="The lid">
+    <div class="stage-bar">
+      <div class="seg" role="group" aria-label="View">
+        <button type="button" id="view-2d" aria-pressed="true">Lid</button>
+        <button type="button" id="view-3d" aria-pressed="false">3D</button>
+      </div>
+      <p class="facts" id="facts"></p>
+    </div>
+    <div class="preview" id="preview"></div>
+    <div class="preview three" id="preview-3d" hidden><p class="status">Loading 3D…</p></div>
+    <p class="hint" id="hint">Tap a design on the lid to change it, or drag it onto another to swap the two.</p>
+  </section>
+
+  <form class="controls" id="controls" autocomplete="off" onsubmit="return false">
+    <h1>Box designer</h1>
+
+    <div class="group">
+      <h2 class="label">Set size</h2>
+      <div class="row size-row">
+        <select id="cols" aria-label="Cubes across"></select>
+        <span aria-hidden="true">×</span>
+        <select id="rows" aria-label="Cubes down"></select>
+        <span class="note" id="size-note"></span>
+      </div>
+      <label class="check"><input type="checkbox" id="any-shape"> Make a set that isn’t square</label>
+    </div>
+
+    <fieldset class="group">
+      <legend class="label">On the lid</legend>
+      <div class="choices" id="styles">
+        <label><input type="radio" name="style" value="classic"> Design with Color Cubes, as on the 1930s lid</label>
+        <label><input type="radio" name="style" value="full"> Fill the lid with designs</label>
+        <label><input type="radio" name="style" value="text"> Your own words</label>
+        <label><input type="radio" name="style" value="big"> One big design</label>
+      </div>
+      <p class="note" id="style-note" hidden>The 1930s lettering needs a set of at least 6 × 6.</p>
+
+      <div id="words" hidden>
+        <div id="lines"></div>
+        <div class="row">
+          <div class="seg" id="align" role="group" aria-label="Line up the words">
+            <button type="button" data-align="l">Left</button>
+            <button type="button" data-align="c">Center</button>
+            <button type="button" data-align="r">Right</button>
+          </div>
+        </div>
+        <div class="color-row" data-k="fill"><span>Panel</span><div class="swatches"></div></div>
+        <div class="color-row" data-k="ink"><span>Letters</span><div class="swatches"></div></div>
+        <p class="note warn" id="text-note" hidden></p>
+      </div>
+    </fieldset>
+
+    <div class="group">
+      <h2 class="label">Colors</h2>
+      <div class="colors" id="colors"></div>
+      <p class="note">These are the set's four filament colors. You can swap them for others in the last step.</p>
+    </div>
+
+    <div class="group next" id="next-group">
+      <a class="btn" id="next" href="/print/">Next: colors and files</a>
+      <button type="button" class="link-btn" id="copy-link">Copy a link to this box</button>
+    </div>
+
+    <div class="group" id="dl-group">
+      <h2 class="label">Just the box</h2>
+      <div class="dl" id="downloads"></div>
+      <p class="note">The lid prints upside down, artwork on the bed, in four colors, with no brim. The tray is one color.</p>
+    </div>
+  </form>
+</main>
+
+<dialog class="picker" id="picker" aria-labelledby="picker-h">
+  <form method="dialog">
+    <div class="picker-head">
+      <h2 id="picker-h">Choose a design</h2>
+      <button class="close" value="cancel" aria-label="Close">×</button>
+    </div>
+    <label class="paste">Or paste a tray code or a designer link
+      <span class="paste-row"><input type="text" id="paste" placeholder="for example 686w313-868w131-…" spellcheck="false"><button type="button" class="btn" id="paste-use">Use it</button></span>
+    </label>
+    <p class="note warn" id="paste-err" hidden></p>
+    <ul class="pick-list" id="picker-list"></ul>
+  </form>
+</dialog>
+
+<footer class="foot">
+  <div class="section foot-main">
+    <div class="foot-about">
+      <a class="brand" href="/" aria-label="Design with Color Cubes, home">
+        <svg class="mark" aria-hidden="true" viewBox="0 0 207 207"><rect x="0" y="0" width="100" height="100" rx="14" fill="#A81F27"/><rect x="0" y="0" width="100" height="91" rx="14" fill="#E5333B"/><polygon points="6.18,5.63 6.18,85.37 93.82,5.63" fill="#FFFFFF"/><rect x="107" y="0" width="100" height="100" rx="14" fill="#173F80"/><rect x="107" y="0" width="100" height="91" rx="14" fill="#2563B8"/><polygon points="200.82,5.63 113.18,5.63 200.82,85.37" fill="#F6CF4B"/><rect x="0" y="107" width="100" height="100" rx="14" fill="#173F80"/><rect x="0" y="107" width="100" height="91" rx="14" fill="#2563B8"/><polygon points="6.18,192.37 93.82,192.37 6.18,112.63" fill="#F6CF4B"/><rect x="107" y="107" width="100" height="100" rx="14" fill="#A81F27"/><rect x="107" y="107" width="100" height="91" rx="14" fill="#E5333B"/><polygon points="200.82,192.37 200.82,112.63 113.18,192.37" fill="#FFFFFF"/></svg>
+        <span class="wordmark" aria-hidden="true"><span class="wm-small">Design with</span> <span class="wm-big">Color Cubes</span></span>
+      </a>
+      <p>Free files to 3D print a 1930s designing toy. Open to anyone who wants to help.</p>
+    </div>
+    <nav class="foot-col" aria-label="Make">
+      <h2>Make</h2>
+      <ul>
+        <li><a href="/#print">Print a set</a></li>
+        <li><a href="/box/">Box designer</a></li>
+        <li><a href="/designer/">Pattern designer</a></li>
+        <li><a href="/patterns/">Patterns</a></li>
+      </ul>
+    </nav>
+    <nav class="foot-col" aria-label="Project">
+      <h2>Project</h2>
+      <ul>
+        <li><a href="https://isaachlloyd.com/blog/design-with-color-cubes">About</a></li>
+        <li><a href="/contribute/">Contribute</a></li>
+        <li><a href="https://github.com/ilslaoaycd/designwithcolorcubes">Source on GitHub</a></li>
+        <li><a href="/downloads/">Files</a></li>
+        <li><a href="/history/">History</a></li>
+      </ul>
+    </nav>
+    <nav class="foot-col" aria-label="Also on">
+      <h2>Also on</h2>
+      <ul>
+        <li><a href="https://makerworld.com/en/models/2062962-design-with-color-cubes-1930-s-kids-toy-replica">MakerWorld</a></li>
+        <li><a href="https://www.thingiverse.com/thing:7218379">Thingiverse</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="section foot-legal">
+    <p>Design with Color Cubes is a creation of <a href="https://isaachlloyd.com/">Isaac Lloyd</a>. Write to <a href="mailto:hello@designwithcolorcubes.org">hello@designwithcolorcubes.org</a>.</p>
+    <p>Models, artwork and photos by Isaac Lloyd, free to share under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Website code is <a href="https://github.com/ilslaoaycd/designwithcolorcubes/blob/main/LICENSE">MIT</a>.</p>
+    <p>Color Cubes were made around 1930 by the Embossing Company of Albany, New York. This replica is redrawn from an original set.</p>
+  </div>
+</footer>
+
+</body>
+</html>
